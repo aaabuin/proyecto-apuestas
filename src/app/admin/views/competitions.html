@@ -1,0 +1,215 @@
+<new-competition></new-competition>
+
+<div class="mensaje_fijo col-md-6">
+    <div class="alert alert-success alert-dimissible" *ngIf="success!=null">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        {{success}}
+    </div>
+    <div class="alert alert-danger alert-dimissible" *ngIf="error!=null">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        {{error}}
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Buscador competiciones</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Nombre competicion</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" (keyup)="filterCompetition()" (blur)="filterCompetition()" [(ngModel)]="filter" placeholder="Filtrar por nombre">
+                        </div>
+
+                        <!-- /.form-group -->
+
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-3">
+                        <label>Estado</label>
+                        <div class="form-group ">
+                            
+                            <select class="form-control" name="selectSportStatus" #selectSportStatus="ngModel" [(ngModel)]="statusFilter" (change)="filterCompetition()">
+                                                <option [ngValue]=''> </option>
+                                                <option [ngValue]=1>Activado</option>
+                                                <option [ngValue]=0>Desactivado</option>
+                                                <option [ngValue]=2>Pendiente de validación</option>
+                                            </select>
+                        </div>
+                    </div>
+                        <!-- /.form-group -->
+                        <!-- /.col -->
+                        <div class="col-md-3">
+                            <label>Deporte</label>
+                            <div class="form-group ">
+                                
+                                <select class="form-control" name="selectSport" #selectSport="ngModel" [(ngModel)]="sportFilter" (change)="filterCompetition()">
+                                            <option [ngValue]=''> </option>
+                                            <option *ngFor="let sport of sportsList" [ngValue]='sport.id'>{{sport.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            <!-- /.form-group -->
+                            <div class="col-md-3">
+                                <label>País</label>
+                                <div class="form-group ">
+                                    
+                                    <select class="form-control" name="selectCountry" #selectCountry="ngModel" [(ngModel)]="countryFilter" (change)="filterCompetition()">
+                                            <option [ngValue]=''> </option>
+                                            <option *ngFor="let country of countriesList" [ngValue]='country.id'>{{country.name}}</option>
+                                        </select>
+                                </div>
+
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+
+
+
+
+            <div class="row">
+                <div class="col-sm-12">
+
+                    <small class="form-text text-muted">*Pulsar sobre el nombre para editar</small>
+                    <table class="table table-bordered table-hover dataTable centrado" role="grid">
+                        <thead>
+                            <tr role="row" class="bg-gray ">
+
+                                <th rowspan="1" colspan="1" class="col-md-3">Nombre competición
+                                    <div class="flota-derecha">
+                                        <i class="fa fa-arrow-circle-up pointer " (click)="sortCompetition('name','asc')"></i>
+                                        <i class="fa fa-arrow-circle-down pointer " (click)="sortCompetition('name','desc')"></i>
+                                    </div>
+
+                                </th>
+                                <th rowspan="1" colspan="1" class="col-md-2">Estado</th>
+
+                                <th rowspan="1" colspan="1" class="col-md-2">Deporte
+                                    <div class="flota-derecha">
+                                        <i class="fa fa-arrow-circle-up pointer " (click)="sortCompetition('sport','asc')"></i>
+                                        <i class="fa fa-arrow-circle-down pointer " (click)="sortCompetition('sport','desc')"></i>
+                                    </div>
+                                </th>
+
+                                <th rowspan="1" colspan="1" class="col-md-2">Pais
+                                    <i class="fa fa-arrow-circle-up pointer " (click)="sortCompetition('country','asc')"></i>
+                                    <i class="fa fa-arrow-circle-down pointer " (click)="sortCompetition('country','desc')"></i>
+                                </th>
+                                <th rowspan="1" colspan="1" class="col-md-2">Usuario
+                                   
+        
+                                </th>
+                                <th rowspan="1" colspan="1" class="col-md-2">Fecha creación
+                                   
+        
+                                </th>
+                                <th rowspan="1" colspan="1" class="col-md-3">Acciones </th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let competi of competitionsList| ordenarCompeticion:sort[0]:sort[1]" role="row">
+                                <th>
+                                    <i *ngIf="modifiedNameId!=null &&  modifiedNameId==competi.id" class="fa fa-fw fa-check-circle bg-gris float-left"></i>
+                                    <div contenteditable="true" id="competitionEditable{{competi.id}}" (keydown)="disableEnter(competi.id)" (blur)="changeName(competi.id)">{{competi.name}}</div>
+                                    <!-- contenteditable pilla el valor dentro del div, inluidos espacios y saltos de linea  -->
+                                </th>
+
+                                <td>
+                                    <span *ngIf="competi.status==1">Activado</span>
+                                    <span *ngIf="competi.status==0">Desactivado</span>
+                                    <span *ngIf="competi.status==2">Pendiente de validación</span>
+                                </td>
+
+                                <td>
+
+                                    <div class="image_size" *ngIf="competi.sport.id!=null">
+                                        <img *ngIf="competi.sport.image != ''" src="{{ url + 'sport/sport-image/' + competi.sport.image }}" /> {{competi.sport.name}}
+                                    </div>
+
+                                    <div *ngIf="edition && edition==competi.id">
+                                        <select class="form-control" name="selectNewSport" #selectNewSport="ngModel" [ngModel]="competi.sport.id" (change)="changeSport(selectNewSport.value)">
+                                <option *ngFor="let sport of sportsLists" [ngValue]='sport.id'>{{sport.name}}</option>
+                            </select>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="image_size" *ngIf="competi.country.id!=null">
+                                        <img *ngIf="competi.country.image != ''" src="{{ url + 'country/country-image/' + competi.country.image }}" />{{competi.country.name}}
+                                    </div>
+
+                                    <div *ngIf="edition && edition==competi.id">
+                                        <select class="form-control" name="selectNewCountry" #selectNewCountry="ngModel" class="form-control" [ngModel]="competi.country.id" (change)="changeCountry(selectNewCountry.value)">
+                                <option *ngFor="let country of countriesList" [ngValue]='country.id'>{{country.name}}</option>
+                            </select>
+                                    </div>
+
+                                </td>
+
+                                <td class="">
+                                    <span *ngIf="competi.userId">{{competi.userId}}</span>
+                                    <span *ngIf="!competi.userId">Admin</span>
+                                    
+                                </td>
+                                <td class="">
+                                    <span *ngIf="competi.createdAt">{{competi.createdAt|date:'dd-MM-yyyy H:mm'}}</span>
+                                </td>
+
+                                <td>
+                                    <span class="badge badge-pill bg-light-blue pointer" (click)="enableEdition(competi.id)">Editar</span>
+                                    <span *ngIf="competi.status!=1" class="badge badge-pill bg-green pointer" (click)="enableCompetition(competi.id)">Activar</span>
+                                    <span *ngIf="competi.status!=0" class="badge badge-pill pointer" (click)="disableCompetition(competi.id)">Desactivar</span>
+
+                                    <a href="#deleteCompeticion{{competi.id}}Modal" data-toggle="modal"> 
+                                    <span  class="badge badge-pill bg-red pointer" >Eliminar</span>
+                            </a>
+
+                                </td>
+
+                                <div class="modal fade" id="deleteCompeticion{{competi.id}}Modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-center" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title"> Confirmación de seguridad. </h4>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                Va a borrar la competición <b>{{competi.name}}</b>. ¿Deseas continuar?
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" id="modalButtonClose" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteCompetition(competi.id)">Borrar</button>
+                                                <!--<input type="submit" value="Acceder" class="btn btn-primary" [disabled]="!loginForm.form.valid" />-->
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+                </div>
+            </div>
+        </div>
+    </div>

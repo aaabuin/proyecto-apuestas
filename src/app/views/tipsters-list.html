@@ -1,0 +1,87 @@
+<div class="content">
+
+    <filter-tipsters (filter)="receiveFilters($event)" ></filter-tipsters>
+    <!-- /.col -->
+    <div class="col-md-8 col-md-offset-2 ">
+
+        <div class="row" *ngFor="let tipster of tipstersList|ordenarTipsters:order[0]:order[1]| paginate: { itemsPerPage: tipstersPerPage, currentPage: 1 }">
+
+            <div class="box">
+                <!-- /.box-header -->
+                <a [routerLink]="['/tipster/', tipster.user.id]">
+                    <div class="box-body letra_mediana pointer">
+
+                        <div class="col-xs-2 col-md-2 box-profile margin-top-5">
+                            <img *ngIf="tipster.user.avatar==null" src="{{ url +'user/user-image/default2.png' }}" class="profile-user-img img-responsive img-circle max_width_80"
+                                alt="User Image" />
+                            <img *ngIf="tipster.user.avatar!=null" src="{{ url +'user/user-image/'+ tipster.user.avatar }}" class="profile-user-img img-responsive img-circle max_width_80"
+                                alt="User Image" />
+
+                            <h4 class="text-center">{{tipster.user.username}}</h4>
+                        </div>
+
+                        <div class="col-xs-10 col-md-5 alinear-centro borde_bajo_screen_xs borde_derecha">
+                            <div class="col_60 margin-top-5">
+                                <div class="selected negrita margin_bottom_5">
+                                    <div class="col_70 bg-blue padding_8">Numero de apuestas:</div>
+                                    <div class="col_30  padding_8 color_black">{{tipster.numPicks}}</div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="selected margin_bottom_5">
+                                    <div class="bg-light-blue col_70 padding_3"> Aciertos/fallos</div>
+                                    <div class="col_30  color_black padding_3"> {{tipster.numWins}} / {{tipster.numFails}}</div>
+                                    <!-- <div class="col_30 padding_3"> Fallos:</div> <div class="col_20 selected color_black padding_3 ">{{tipster.numFallos}}</div> -->
+
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="clear"></div>
+
+                                <div class="selected negrita  ">
+                                    <div class="col_70 bg-blue padding_8"> CUOTA MEDIA:</div>
+                                    <div class="col_30 padding_8 color_black">{{tipster.oddAverage}}</div>
+
+                                    <div class="clear"></div>
+                                </div>
+                            </div>
+
+                            <div class="col_40 ">
+                                <div [chart]="winsChart[tipster.user.username]"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-xs-10 col-xs-offset-2 col-md-5 col-md-offset-0 alinear-centro borde_bajo_screen_xs borde_derecha">
+
+                            <div class="col_60 margin-top-5">
+                                <div class="selected negrita margin_bottom_5">
+                                    <div class="col_70 bg-blue padding_8">Unidades apostadas:</div>
+                                    <div class="col_30 color_black padding_8">{{tipster.stakedUnits}}</div>
+                                    <div class="clear"></div>
+                                </div>
+
+                                <div class="selected margin_bottom_5">
+                                    <div class="col_70 bg-light-blue padding_3">Balance:</div>
+                                    <div class="col_30 color_black padding_3">{{tipster.profit}}</div>
+
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="negrita selected margin_bottom_5">
+                                    <div class="col_70 bg-blue  padding_8"> STAKE MEDIO</div>
+                                    <div class="col_30  padding_8 color_black">{{tipster.stakeAverage}} </div>
+                                    <div class="clear"></div>
+                                </div>
+                            </div>
+                            <div class="col_40">
+                                <div [chart]="yieldChart[tipster.user.username]"></div>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                    </div>
+                </a>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <a href="javascript:void(0)" (click)="showMore()" class="uppercase">Mostrar más tipsters</a>
+    </div>
+</div>

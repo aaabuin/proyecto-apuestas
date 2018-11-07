@@ -1,0 +1,211 @@
+<div class="content">
+
+    <!-- /.col -->
+    <div class="col-md-8 col-md-offset-2 ">
+
+        <div class="mensaje_fijo col-md-6">
+            <div class="alert alert-danger alert-dimissible" *ngIf="error!=null">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> {{error}}
+            </div>
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="box centrado">
+                <div class="box-body">
+
+                    <div class="col-xs-4 col-md-2 box-profile image_size_big padding_left_0">
+                        <a *ngIf="bet.user" [routerLink]="['/tipster/', bet.user.id]">
+                        <img *ngIf="!bet || !bet.user || !bet.user.avatar || bet.user.avatar==''" class="profile-user-img img-responsive img-circle"
+                            src="{{url}}user/user-image/default2.png" alt="User profile picture">
+                        <img *ngIf="bet && bet.user && bet.user.avatar && bet.user.avatar!=''" class="profile-user-img img-responsive img-circle"
+                            src="{{url}}user/user-image/{{bet.user.avatar}}" alt="User profile picture">
+
+                        <h3 class="profile-username text-center" *ngIf="bet.user">{{bet.user.username}}</h3>
+                    </a>
+                    </div>
+
+
+
+                    <div class="col-xs-8 col-md-10">
+                        <div class="row">
+                            <div class="col-md-6 margin_bottom_5 padding_right_0">
+                                <div class="float-left bg-gray padding_5"> Fecha publicacion: </div>
+                                <div class="float-left bg-gray-light padding_5" *ngIf="bet.createdAt">{{bet.createdAt|date:"dd-MM-yyyy H:mm:ss"}}</div>
+
+                                <div class="clear"></div>
+                            </div>
+                            <div class="col-md-6 margin_bottom_5 padding_right_0" *ngIf="bet.updatedAt">
+                                <div class="float-left bg-gray padding_5">Resultado actualizado:</div>
+                                <div class="float-left bg-gray-light padding_5"> {{bet.updatedAt|date:"dd-MM-yyyy H:mm:ss"}}</div>
+
+                                <div class="clear"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4  negrita margin_bottom_5 padding_right_0">
+                                <div class="col_40 bg-blue padding_8">STAKE:</div>
+                                <div class="col_30 bg-gray padding_8 color_black" *ngIf="bet">{{bet.stake}}</div>
+
+                                <div class="clear"></div>
+                            </div>
+
+                            <div class="col-md-4 negrita margin_bottom_5 padding_right_0">
+                                <div class="col_40 bg-blue padding_8">Cuota:</div>
+                                <div class="col_30 bg-gray padding_8 color_black" *ngIf="odd">@ {{odd}}</div>
+
+                                <div class="clear"></div>
+                            </div>
+
+                            <div class="col-md-4 negrita margin_bottom_5 padding_right_0">
+                                <div class="col_40 bg-blue padding_8">Resultado:</div>
+                                <div class="col_30 bg-gray padding_8 color_black" *ngIf="result">
+                                    <span *ngIf="result==0" class="label bg-gray">Pendiente</span>
+                                    <span *ngIf="result==1" class="label bg-green">Acierto</span>
+                                    <span *ngIf="result==2" class="label label-danger">Fallo</span>
+                                    <span *ngIf="result==3" class="label label-primary">Nulo</span>
+                                    <span *ngIf="result==4" class="label bg-teal">Semiacierto</span>
+                                    <span *ngIf="result==5" class="label label-warning">Semifallo</span>
+                                </div>
+
+                                <div class="clear"></div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row margin-top-25" *ngIf="bet.picks && bet.picks.length>0">
+                            <ul class="col-md-12 lista_picks_2 letra_mediana">
+
+                                <li>
+                                    <div class="row bg-gray sin_margen negrita ">
+
+                                        <div class="col-md-2 border">
+                                            Fecha
+                                        </div>
+                                        <div class="col-md-4 border">
+                                            Competicion
+                                        </div>
+                                        <div class="col-md-2 border">
+                                            Evento
+                                        </div>
+                                        <div class="col-md-2 border">
+                                            Pronóstico
+                                        </div>
+                                        <div class="col-md-1 border">
+                                            Cuota
+                                        </div>
+                                        <div class="col-md-1 border">
+                                            Resultado
+                                        </div>
+
+
+                                    </div>
+                                </li>
+                                <li *ngFor="let pick of bet.picks">
+                                    <div class="row row_lista_picks sin_margen">
+
+
+
+                                        <div class="col-md-2 border">
+                                            <div *ngIf="pick.event">
+                                                <div class="negrita">
+                                                    {{pick.event.date|date:"dd-MM-yyyy"}}
+                                                </div>
+                                                <div>
+                                                    {{pick.event.date|date:"HH:mm"}}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 border">
+                                            <div class="image_size">
+                                                <div class="pull-left">
+                                                    <img *ngIf="pick.event.competition.country.image!=''" title="{{pick.event.competition.country.name}}" src="{{ url + 'country/country-image/' + pick.event.competition.country.image }}"
+                                                    />
+                                                    <img *ngIf="pick.event.competition.sport.image!=''" title="{{pick.event.competition.country.name}}" src="{{ url + 'sport/sport-image/' + pick.event.competition.sport.image }}"
+                                                    />
+                                                </div>
+
+                                                <div class="pull-right">
+
+
+                                                    <strong class="">
+                                                            {{pick.event.competition.name}}
+                                                            <p class="text-muted">
+                                                                 {{pick.event.competition.country.name}}, {{pick.event.competition.sport.name}}
+                                                                </p>
+                                                        </strong>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2 border">
+                                            <div class="negrita">{{pick.event.name}}</div>
+                                        </div>
+                                        <div class="col-md-2 border">
+                                            <div class="negrita">{{pick.pick}}</div>
+                                        </div>
+
+                                        <div [ngClass]="{'col-md-1 border':true, 'bg_acierto': pick.result==1,'bg_fallo': pick.result==2,
+                                                    'bg_nulo': pick.result==3,'bg_semifallo': pick.result==4,'bg_semiacierto': pick.result==5 } ">
+
+                                            <div class="negrita">@{{pick.odd}}
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-1 border">
+                                            <div>
+                                                <span *ngIf="pick.result==0" class="label bg-gray">Pendiente</span>
+                                                <span *ngIf="pick.result==1" class="label bg-green">Acierto</span>
+                                                <span *ngIf="pick.result==2" class="label label-danger">Fallo</span>
+                                                <span *ngIf="pick.result==3" class="label label-primary">Nulo</span>
+                                                <span *ngIf="pick.result==4" class="label bg-teal">Semiacierto</span>
+                                                <span *ngIf="pick.result==5" class="label label-warning">Semifallo</span>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="clear"></div>
+
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="row margin-top-25">
+                            <div class="col-md-8 " *ngIf="bet">
+                                <div class="box">
+                                    <div class="box-header" *ngIf="bet.argument!=''">Argumento:<br/>{{bet.argument}}</div>
+                                    <div class="box-body" *ngIf="bet.argument==''">Sin argumento</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" *ngIf="bet && bet.bookie">
+                                <div class="box">
+                                    <div class="box-body image_size_xl">
+                                        <div>
+                                            <img *ngIf="bet.bookie.image!=''" title="{{bet.bookie.name}}" src="{{ url + 'bookie/bookie-image/' + bet.bookie.image }}"
+                                            />
+                                        </div>
+                                        <div>{{bet.bookie.name}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>

@@ -1,0 +1,240 @@
+<new-event></new-event>
+
+<div class="mensaje_fijo col-md-6">
+    <div class="alert alert-success alert-dimissible" *ngIf="success!=null">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        {{success}}
+    </div>
+    <div class="alert alert-danger alert-dimissible" *ngIf="error!=null">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        {{error}}
+    </div>
+</div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Buscador Eventos</h3>
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Nombre del evento</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" (keyup)="filterEvents()" (blur)="filterEvents()" [(ngModel)]="nameFilter" placeholder="Filtrar por nombre">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Fecha del evento</label>
+                            <div class="form-group">
+                                <select class="col-md-12" name="selectDateT" #selectDateT="ngModel" [(ngModel)]="dateTime" (change)="filterEvents()">
+                                            <option value='now' >Fecha exacta</option>
+                                            <option value='before' >Antes de...</option>
+                                            <option value='after'>Despues de...</option>
+                                    </select>
+                                <input type="date" class="form-control" (change)="filterEvents()" [(ngModel)]="dateFilter">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Competición del evento</label>
+                            <div class="form-group">
+                                
+                                <select class="col-md-6" name="selectSportFilter" #selectSportFilter="ngModel" [(ngModel)]="filterBySport" (change)="competitionsFilterSearch()">
+                                    <option [ngValue]=null> Sin filtro</option>
+                                    <option *ngFor="let sport of sportsList" [ngValue]='sport.id'>{{sport.name}}</option>
+                                </select>
+                                
+                                <select class="col-md-6" name="selectCountryFilter" #selectCountryFilter="ngModel" [(ngModel)]="filterByCountry" (change)="competitionsFilterSearch()">
+                                    <option [ngValue]=null>Sin filtro </option>
+                                    <option *ngFor="let country of countriesList" [ngValue]='country.id'>{{country.name}}</option>
+                                </select>
+                                
+
+                                <select class="form-control" name="selectCompetitionFilter" #selectCompetitionFilter="ngModel" [(ngModel)]="competitionFilter"
+                                    (change)="filterEvents()">
+                                        <option *ngFor="let competi of competitionsFilterList" [ngValue]='competi.id' >{{competi.name}}</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <small class="form-text text-muted">*Pulsar sobre el nombre para editar</small>
+            <table class="table table-bordered table-hover dataTable centrado" role="grid">
+                <thead>
+                    <tr role="row" class="bg-gray ">
+
+                        <th rowspan="1" colspan="1" class="col-md-3">Evento
+                            <div class="flota-derecha">
+                                <i class="fa fa-arrow-circle-up pointer" (click)="sortEvents('name','asc')"></i>
+                                <i class="fa fa-arrow-circle-down pointer" (click)="sortEvents('name','desc')"></i>
+                            </div>
+                        </th>
+                        <th rowspan="1" colspan="1" class="col-md-3">Fecha
+                            <div class="flota-derecha">
+                                <i class="fa fa-arrow-circle-up pointer" (click)="sortEvents('date','asc')"></i>
+                                <i class="fa fa-arrow-circle-down pointer" (click)="sortEvents('date','desc')"></i>
+                            </div>
+                        </th>
+                        <th rowspan="1" colspan="1" class="col-md-3">Competición
+                            <div class="flota-derecha">
+                                <i class="fa fa-arrow-circle-up pointer" (click)="sortEvents('competition','asc')"></i>
+                                <i class="fa fa-arrow-circle-down pointer" (click)="sortEvents('competition','desc')"></i>
+                            </div>
+                        </th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Usuario
+                            
+ 
+                         </th>
+                         <th rowspan="1" colspan="1" class="col-md-2">Fecha creación
+                            
+ 
+                         </th>
+
+                        <th scope="row">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    
+
+                    <tr *ngFor="let e of eventList| ordenarEventos :sort[0]:sort[1]" role="row">
+                            <th scope="row">
+                                    <i *ngIf="modifiedNameId!=null &&  modifiedNameId==e.id" class="fa fa-fw fa-check-circle bg-gris float-left"></i>
+                                    <div contenteditable="true" id="eventEditable{{e.id}}" (keydown)="disableEnter(e.id)" (blur)="changeName(e.id)">{{e.name}}</div>
+                                    <!-- contenteditable pilla el valor dentro del div, inluidos espacios y saltos de linea  -->
+                                </th>
+        
+                                <td>
+                                    <div *ngIf='editDateId && editDateId==e.id'>
+                                        <div class="form-group">
+                                            <input type="datetime-local" name="dateEvent" #dateEvent="ngModel" [(ngModel)]="e.date" />
+                                        </div>
+                                        <div >
+                                            <span class="badge badge-pill bg-default pointer" (click)="changeDate(0)">Cancelar</span>
+                                        <span class="badge badge-pill bg-green pointer" (click)="saveDate()">Guardar</span>
+                                        </div>
+                                    </div>
+                                    <div class="pointer" *ngIf='!editDateId || editDateId!=e.id' (click)="changeDate(e.id)">
+                                        <div>{{e.date|date:'dd-MM-yyyy'}}</div>
+                                        <div>{{e.date|date:'H:mm'}}</div>
+                                    </div>
+        
+                                </td>
+        
+                                <td>
+                                    <div *ngIf="!editionId || editionId!=e.id" class="image_size pointer" (click)="editCompetition(e.id)">
+                                        <span *ngIf="e.competition.sport &&  e.competition.sport.id!=null">
+                                            <img  *ngIf="e.competition.sport.image != ''" src="{{ url + 'sport/sport-image/' + e.competition.sport.image }}" />
+                                            <span *ngIf="e.competition.sport.image == ''">{{e.competition.sport.name}}</span>
+                                        </span>
+                                        <span *ngIf="!e.competition.sport || e.competition.sport.id==null">
+                                            No se encuentra el deporte
+                                        </span>
+                    
+                                        <span *ngIf="e.competition.country &&  e.competition.country.id!=null">
+                                            <img  *ngIf="e.competition.country.image != ''" src="{{ url + 'country/country-image/' + e.competition.country.image }}" />
+                                            <span *ngIf="e.competition.country.image == ''">{{e.competition.country.name}}</span> 
+                                        </span>
+                                        <span *ngIf="!e.competition.country || e.competition.country.id==null">
+                                            No se encuentra el pais
+                                        </span>
+                                        <div class="negrita">{{e.competition.name}}</div>
+                                    </div>
+                        
+                        
+                        
+                                    <span *ngIf="editionId && editionId==e.id">        
+                                        <select class="col-md-6" name="sportSelect"  #sportSelect="ngModel" [(ngModel)]="sportFilter" (change)="filterCompetitions()">
+                                            <option [ngValue]=null> Sin filtro</option>
+                                            <option *ngFor="let sport of sportsList" [ngValue]='sport.id'>{{sport.name}}</option>
+                                        </select>
+                                        <select class="col-md-6" name="countrySelect" #countrySelect="ngModel" [(ngModel)]="countryFilter" (change)="filterCompetitions()">
+                                            <option [ngValue]=null>Sin filtro </option>
+                                            <option *ngFor="let country of countriesList" [ngValue]='country.id'>{{country.name}}</option>
+                                        </select>
+                                    
+                                        <select class="form-control" name="selectCompetition" #selectCompetition="ngModel" [ngModel]="e.competition.id"  (change)="changeCompetition(selectCompetition.value)">
+                                            <option></option>    
+                                            <option *ngFor="let competi of competitionsList" [ngValue]='competi.id'>{{competi.name}}</option>
+                                        </select>
+                                    </span>
+    
+                                </td>
+        
+                                <td class="">
+                                    <span *ngIf="e.userId">{{e.userId}}</span>
+                                    <span *ngIf="!e.userId">Admin</span>
+                                    
+                                </td>
+                                <td class="">
+                                    <span *ngIf="e.createdAt">{{e.createdAt|date:'dd-MM-yyyy H:mm'}}</span>
+                                    
+                                </td>
+
+                                <td>
+                                    <span class="badge badge-pill bg-light-blue pointer" (click)="editCompetition(e.id)">Editar</span>
+        
+                                    <a href="#deleteEvent{{e.id}}Modal" data-toggle="modal"> 
+                                        <span  class="badge badge-pill bg-red pointer" >Eliminar</span></a>
+        
+        
+                                        <div class="modal fade" id="deleteEvent{{e.id}}Modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-center" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                            <h4 class="modal-title"> Confirmación de seguridad. </h4>
+                                                        </div>
+                                
+                                
+                                                        <div class="modal-body">
+                                                            Va a borrar el evento <b>{{e.name}}</b>. ¿Deseas continuar?
+                                                        </div>
+                                
+                                                        <div class="modal-footer">
+                                                            <button type="button" id="modalButtonClose" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteEvent(e.id)">Borrar</button>
+                                                            <!--<input type="submit" value="Acceder" class="btn btn-primary" [disabled]="!loginForm.form.valid" />-->
+                                                        </div>
+                                
+                                
+                                                    </div>
+                                
+                                                </div>
+                                            </div>
+        
+        
+        
+                                    </td>
+                    </tr>
+                </tbody>
+            </table>
+
+                    
+
+        </div>
+    </div>
+

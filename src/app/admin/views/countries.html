@@ -1,0 +1,109 @@
+<new-country></new-country>
+
+<div class="mensaje_fijo col-md-6">
+    <div class="alert alert-success alert-dimissible" *ngIf="success!=null">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        {{success}}
+    </div>
+    <div class="alert alert-danger alert-dimissible" *ngIf="error!=null">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        {{error}}
+    </div>
+</div>
+
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <small class="form-text text-muted">*Pulsar sobre el nombre para editar</small>
+            <table id="example1" class="table table-bordered table-hover dataTable centrado" role="grid">
+                <thead>
+                    <tr role="row" class="bg-gray ">
+                        <th rowspan="1" colspan="1" class="col-md-2">Nombre país
+                            <div class="flota-derecha">
+                                <i class="fa fa-arrow-circle-up pointer "></i>
+                                <i class="fa fa-arrow-circle-down pointer "></i>
+                            </div>
+                        </th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Imagen</th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Estado</th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Usuario </th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Fecha creación</th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr role="row" *ngFor="let c of countriesList">
+
+                        <th class="">
+                            <i *ngIf="modifiedCountryId!=null && modifiedCountryId==c.id" class="fa fa-fw fa-check-circle bg-gris float-left"></i>
+                            <div contenteditable="true" id="countryEditable{{c.id}}" (keydown)="disableEnter(c.id)" (blur)="changeName(c.id)">{{c.name}}</div>
+
+                        </th>
+                        <td class="">
+
+                            <div class="image_size" *ngIf="c.image != ''">
+                                <img src="{{ url + 'country-image/' + c.image }}" />
+                                <span (click)="deleteCountryImage(c.id)" class="badge bg-orange pointer">Quitar imagen</span>
+                            </div>
+                            <div *ngIf="c.image == ''"><input type="file" class="fileinput" placeholder="Subir imagen" (change)="fileChangeEvent($event,c.id)"
+                                /></div>
+
+                        </td>
+                        <td class="">
+                            <span *ngIf="c.status==1">Activado</span>
+                            <span *ngIf="c.status==0">Desactivado</span>
+                            <span *ngIf="c.status==2">Pendiente de validación</span>
+                        </td>
+                        <td class="">
+                                <span *ngIf="c.userId">{{c.userId}}</span>
+                                <span *ngIf="!c.userId">Admin</span>
+                                
+                            </td>
+                            <td class="">
+                                <span *ngIf="c.createdAt">{{c.createdAt|date:'dd-MM-yyyy H:mm'}}</span>
+                                
+                            </td>
+                        <td>
+                            <span *ngIf="c.status!=1" class="badge badge-pill bg-green pointer" (click)="enableCountry(c.id)">Activar</span>
+                            <span *ngIf="c.status!=0" class="badge badge-pill pointer" (click)="disableCountry(c.id)">Desactivar</span>
+
+                            <a href="#deleteCountry{{c.id}}Modal" data-toggle="modal"> 
+                                    <span class="badge badge-pill bg-red pointer" >Eliminar</span>
+                            </a>
+
+                            <div class="modal fade" id="deleteCountry{{c.id}}Modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-center">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span></button>
+
+                                            <h4 class="modal-title"> Confirmación de seguridad. </h4>
+
+                                        </div>
+
+
+                                        <div class="modal-body">
+                                            Va a borrar el pais <b>{{c.name}}</b>. ¿Deseas continuar?
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" id="modalButtonClose" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteCountry(c.id)">Borrar</button>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </td>
+
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>

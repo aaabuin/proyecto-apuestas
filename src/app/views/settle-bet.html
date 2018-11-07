@@ -1,0 +1,72 @@
+<div class="modal-body">
+    <div class="col-md-12">
+        <ul class="lista_sin_estilo centrado">
+            <li *ngFor="let pick of bet.picks;index as i">
+                <div class="row borde_bajo">
+                    <div class="col_15">
+                        <div class="negrita" *ngIf="pick.event ">
+                            {{pick.event.date|date:"dd-MM-yyyy H:mm"}}
+                        </div>
+                    </div>
+                    <div class="col_30 ">
+                        <strong class="" *ngIf="pick.event ">
+                            {{pick.event.competition.name}}
+                            <p class="text-muted">
+                                {{pick.event.competition.country.name}}, {{pick.event.competition.sport.name}}
+                            </p>
+                        </strong>
+
+                    </div>
+
+
+                    <div class="col_35 ">
+                        <div class="negrita" *ngIf="pick.event ">
+                            {{pick.event.name}}
+                        </div>
+                        <div>
+                            {{pick.pick}}
+
+                        </div>
+                    </div>
+
+                    <div class="col_20 ">
+                        <div class="negrita">@{{pick.odd}}
+                        </div>
+
+                        <select *ngIf="pick.result==0" name="selectResult" #selectRes="ngModel" [(ngModel)]="modifiedPicks[i].result">
+                            <option value='0'>Pendiente</option>
+                            <option value='1'>Acierto</option>
+                            <option value='2'> Fallo</option>
+                            <option value='3'> Nulo</option>
+                            <option value='4'> Semiacierto</option>
+                            <option value='5'> Semifallo</option>
+                        </select>
+
+                        
+                        <span *ngIf="modifiedPicks[i].result==1" class="label bg-green">Acierto</span>
+                        <span *ngIf="modifiedPicks[i].result==2" class="label label-danger">Fallo</span>
+                        <span *ngIf="modifiedPicks[i].result==3" class="label label-primary">Nulo</span>
+                        <span *ngIf="modifiedPicks[i].result==4" class="label bg-teal">Semiacierto</span>
+                        <span *ngIf="modifiedPicks[i].result==5" class="label label-warning">Semifallo</span>
+                        {{modifiedPicks[i].result}} {{pick.result}}
+
+                    </div>
+
+
+
+                </div>
+
+
+
+            </li>
+        </ul>
+
+    </div>
+    Una vez asignado el resultado del pronóstico no se podrá volver a cambiar. ¿Deseas continuar?
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="dimissChanges()">Cancelar</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="determineBet()">Guardar</button>
+    <!--(click)="resolverApuesta(apuesta.id)"<input type="submit" value="Acceder" class="btn btn-primary" [disabled]="!loginForm.form.valid" />-->
+</div>

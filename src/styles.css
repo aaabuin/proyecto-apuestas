@@ -1,0 +1,511 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+body{
+    background-color: #EEEEEE;
+}
+
+.clear {
+    clear: both;
+}
+
+.ancho_total{
+    width: 100%;
+}
+.mensaje_fijo{
+    position: fixed;
+    z-index:1030;
+    top: 7%;
+    margin:auto;
+    left:25%;
+}
+.detalles-blancos{
+    background-color: white;
+    border: thin solid white;
+}
+
+.margin-top-7{
+    margin-top:7px;
+    margin-right: 5px;
+}
+
+.image_size img{
+    max-height: 40px;
+    max-width: 40px;
+}
+.image_size_bookie img{
+    max-height: 40px;
+    max-width: 60px;
+    margin-bottom: 7px;
+}
+
+.image_size_big img{
+    max-height: 100px !important;
+    max-width: 80px !important;
+
+}
+
+.image_size_xl img{
+    max-height: 100px !important;
+    max-width: 175px !important;
+
+}
+
+.max_width_80{
+    max-height: 80px!important;
+    max-width: 80px !important;
+}
+.fileinput{
+    width: 150px;
+    margin: auto;
+    color: transparent;
+}
+
+.modal-center{
+        position: relative;
+        top: 30%;
+        transform: translateY(-30%);
+      
+}
+
+.alinear-centro{
+    text-align: center;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.sin_margen{
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.margin-top-15{
+    margin-top: 15px;
+}
+.margin-top-25{
+    margin-top: 25px;
+}
+
+.margin-top-5{
+    margin-top: 5px;
+}
+
+.margin-left-10{
+    margin-left: 10;
+}
+.float-left{
+    float: left;
+}
+.bg-gris {
+    color: green;
+    background-color: transparent;
+}
+.centrado{
+    text-align: center;
+    
+}
+
+.lista_picks{
+    border-radius: 2px;
+    background: #f4f4f4;
+    margin-bottom: 2px;
+    color: #444;
+    list-style: none;
+    padding-left: 0px !important;
+    min-width: 950px;
+}
+
+.lista_picks_2{
+    border-radius: 2px;
+    background: #f4f4f4;
+    margin-bottom: 2px;
+    color: #444;
+    list-style: none !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+
+}
+
+.lista_sin_estilo{
+    list-style: none;
+}
+
+
+.overflow{
+    overflow: auto;
+}
+.lista_combinadas{
+    background-color: #dadada;
+    list-style: none;
+    padding: 0px !important;
+}
+
+.row_lista_picks{
+    height: 70px;
+    clear: both;
+}
+.row_lista_picks .border{
+    min-height: 70px;
+}
+.border{
+    border: thin solid white;
+    padding: 8px !important;
+    text-align: center;  
+}
+.border_no_bottom{
+    border-top:thin solid white;
+    border-left:thin solid white;
+    border-right:thin solid white;
+    padding: 8px !important;
+    text-align: center;  
+}
+.border_top{
+    border-top: thin solid white;
+    padding: 8px !important;
+}
+
+.box-header{
+    padding: 15px;
+}
+.flota-derecha{
+    float: right;
+}
+.centrado th{
+    text-align: center ;
+    
+}
+
+.padding_10{
+    padding: 10px !important;
+}
+.padding_none{
+    padding: 0px ;
+}
+
+.padding_right_0{
+    padding-right: 0px !important;
+}
+.altura_fija{
+    height: 80px;
+    float: left;
+    margin: 10px;
+    background-color: #f4f4f4;
+}
+.altura_fija_2{
+    height: 80px;
+    float: left;
+    margin: 10px;
+}
+
+.tipster_image{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin:auto;
+}
+.letra_grande{
+    font-size: 16px;
+}
+
+
+.col_4{
+    width: 4%;
+    float:left;
+}
+.col_5{
+    width: 5%;
+    float:left;
+}
+.col_6{
+    width: 6%;
+    float:left;
+}
+
+.col_8{
+    width: 8%;
+    float:left;
+}
+
+.col_9{
+    width: 9%;
+    float:left;
+}
+
+.col_10_resp{
+/* cambia con pantallas menores de 1200px*/
+    width: 10%;
+    float:left;
+}
+.col_10{
+    width: 10%;
+    float:left;
+}
+.col_12{
+    width: 12%;
+    float:left;
+}
+
+.col_15{
+    width: 15%;
+    float:left;
+}
+.col_20_resp{
+    /* cambia con pantallas muy pequeñas,>577px*****revisar*/
+    width: 20%;
+    float:left;
+}
+.col_20{
+    width: 20%;
+    float:left;
+}
+.col_25{
+    width: 25%;
+    float:left;
+}
+.col_30{
+    width: 30%;
+    float:left;
+}
+.col_35{
+    width: 35%;
+    float:left;
+}
+
+.col_40{
+    width: 40%;
+    float:left;
+}
+
+.col_50{
+    width: 50%;
+    float:left;
+}
+
+.col_60{
+    width: 60%;
+    float:left;
+}
+
+.col_70{
+    width: 70%;
+    float:left;
+}
+
+.borde_bajo{
+    border-bottom: thin solid #e5e5e5;
+    margin-bottom: 10px;
+}
+.centrar-verticalmente{
+   padding-top: 20px !important;
+}
+
+.ancho_fijo{
+    width: 95%;
+    text-align: center;
+
+}
+.negrita{
+    font-weight: bold;
+}
+
+.selected{
+    background-color: #C9CFDF !important;
+}
+.selected_2{
+    background-color: #c9cfdf6b  !important;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+  vertical-align: middle;  
+}
+
+.text-left {
+    color: #646464;
+    text-align: left;
+}
+.margin_bottom_0{
+    margin-bottom: 0px !important;
+}
+
+.color_red{
+    color:red;
+}
+
+.color_black{
+    color: #2A2A2A;
+    font-weight: bold;
+}
+
+.detalles_combi{
+    padding-left: 6%;
+    
+}
+.padding_8{
+    padding: 8px;
+}
+
+.padding_5{
+    padding: 5px;
+}
+.padding_3{
+    padding: 3px;
+}
+.padding_left_0{
+    padding-left: 0px;
+}
+
+.margin_bottom_5{
+    margin-bottom: 5px;
+}
+.margen_lateral{
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 2px;
+}
+
+.tabla_combinadas{
+    background-color: transparent !important;
+}
+
+.bg_acierto{
+    background-color: rgba(18, 212, 7, 0.61);
+    color: black;
+}
+.bg_fallo{
+    background-color: rgba(255, 25, 25, 0.59);
+    color: black;
+}
+.bg_nulo{
+    background-color: rgba(118, 185, 222, 0.72);
+    color: black;
+}
+
+.bg_semifallo{
+    background-color: rgba(129, 255, 236, 0.97);
+    color: black;
+}
+.bg_semiacierto{
+    background-color: #f8bd52;
+    color: black;
+}
+.bg_aliceblue{
+    background-color: rgb(184, 225, 241) ;
+    
+}
+
+.oculto{
+    display: none;
+}
+
+.borde_derecha{
+    border-right: thin solid rgba(222, 222, 222, 0.55);
+}
+.grafico{
+    width: 64px;
+    height: 40px;
+    position: absolute; 
+    vertical-align: middle; 
+    margin-top: 40px; 
+    margin-left: -92px; 
+    border: 0px; 
+    background: none; 
+    font-style: normal; 
+    font-variant: normal; 
+    font-weight: bold; 
+    font-stretch: normal; font-size: 24px; 
+    line-height: normal; 
+    font-family: Arial; 
+    text-align: center; 
+    color:gray !important; 
+    padding: 0px; 
+    -webkit-appearance: none;
+}
+
+.texto-knob{
+    margin-top: -25px;
+    font-weight: bold;
+    color: rgb(144, 144, 144);
+}
+
+
+.highcharts-button{
+    display: none!important;
+}
+
+.highcharts-container {
+    height: 130px!important;
+}
+.highcharts-root{
+    margin-top: -15px;
+}
+.highcharts-yaxis-labels{
+    display: none!important;
+}
+
+.highcharts-data-label span{
+    font-size: 18px!important;
+}
+.highcharts-axis-title{
+    font-weight: bold!important;
+    color: gray!important;
+}
+
+.letra_mediana{
+    font-size: 12px;
+}
+
+.height_80 {
+    height:80px!important
+}
+@media screen and (max-width: 1200px) {
+    .col_10_resp{
+        width: 20%;
+        float:left;
+    }
+    }
+
+@media screen and (max-width: 576px) {
+    .col_10_resp{
+        width: 50%;
+        float:left;
+    }
+    .col_20_resp{
+        width: 50%;
+        float:left;
+    }
+
+    
+    }
+
+/*Si la pantalla es pequeña reducimos la letra, y ocultamos la etiqueta "large"*/
+@media screen and (max-width: 480px) {
+    .reducir-sm-dv{
+        font-size: 15px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    .large-dev{
+        display: none;
+    }
+    
+    
+}
+/*Si la pantalla es grande ocultamos la etiqueta "small"*/
+@media screen and (min-width: 480px) {
+    .small-dev{
+        display: none;
+    }
+    
+
+}
+
+/*Si la pantalla es menor que mediana...habilitamos separadores de estadisticas*/
+@media screen and (max-width: 992px) {
+    .borde_bajo_screen_xs{
+        border-bottom: thin solid #e5e5e5;
+        margin-bottom: 5px;
+        padding-bottom: 5px;
+    }
+    
+
+}

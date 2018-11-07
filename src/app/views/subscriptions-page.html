@@ -1,0 +1,479 @@
+<div class="content">
+    <div class="mensaje_fijo col-md-6">
+        <div class="alert alert-danger alert-dimissible" *ngIf="error!=null">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> {{error}}
+        </div>
+    </div>
+
+
+    <stats [bettingList]="subscriptionBettingList" [alert]="changeAlert" [tipster]="identity"></stats>
+
+
+    
+
+    <div class="row">
+        
+        <div class="col-md-12">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+
+                    <filter-bets (filter)="receiveFilters($event)" [key]="['subscriptionBet',identity.id]"></filter-bets>
+
+                    <tipster-filter-list [paramsSearch]="paramsSearch" (tipster_filter)="receiveTipster($event)"></tipster-filter-list>
+
+                    <div *ngIf="loading" class="overlay">
+                        <i class="fa fa-refresh fa-spin"></i>
+                    </div>
+                    <h3 class="box-title">Pronosticos seguidos de mis tipsters...</h3>
+
+
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+
+
+
+                    <div *ngIf="subscriptionBettingList.length==0 && !loading">
+                        <h5>No se encontraron pronosticos...</h5>
+                    </div>
+
+
+
+                    <div class="container-fluid overflow" *ngIf="subscriptionBettingList.length>0">
+                        <ul class="lista_picks">
+
+                            <li>
+                                <div class="row bg-gray sin_margen negrita">
+
+
+                                    <div class="col_6 border_no_bottom">
+                                        Tipster
+                                    </div>
+                                    <div class="col_8 border_no_bottom">
+                                        Fecha
+                                    </div>
+                                    <div class="col_20 border_no_bottom">
+                                        Competicion
+                                    </div>
+                                    <div class="col_15 border_no_bottom">
+                                        Evento
+                                    </div>
+                                    <div class="col_15 border_no_bottom">
+                                        Pronóstico    <small class="form-text text-muted aviso_editable">*</small>                                        
+                                    </div>
+                                    <div class="col_6 border_no_bottom">
+                                        Cuota    <small class="form-text text-muted aviso_editable">*</small>
+                                        
+                                    </div>
+                                    <div class="col_8 border_no_bottom">
+                                        Resultado    <small class="form-text text-muted aviso_editable">*</small>
+                                        
+                                    </div>
+                                    <div class="col_5 border_no_bottom">
+                                        Cant   <small class="form-text text-muted aviso_editable">*</small>
+                                        
+                                    </div>
+                                    <div class="col_9 border_no_bottom">
+                                        Bookie   <small class="form-text text-muted aviso_editable">*</small>
+                                        
+                                    </div>
+                                    <div class="col_8 border_no_bottom">
+                                        Acciones
+                                    </div>
+
+                                </div>
+                            </li>
+                            <li *ngFor="let bet of subscriptionBettingList| ordenarApuestasPorFecha:details">
+                                <div *ngIf="bet.picks && bet.picks.length>0" class="row row_lista_picks sin_margen">
+                                    <div class="col_6 border">
+                                        <div *ngIf="!bet.bet.user">
+                                            <i class="fa fa-refresh fa-spin"></i>
+                                        </div>
+                                        <a *ngIf="bet.bet&&bet.bet.user" href="/tipster/{{bet.bet.user.id}}">
+                                            <div >
+
+                                                <img *ngIf="bet.bet.user.avatar==null" src="{{ url +'user/user-image/default2.png' }}" class="tipster_image detalles-blancos"
+                                                    alt="User Image" />
+                                                <img *ngIf="bet.bet.user.avatar!=null" src="{{ url +'user/user-image/'+ bet.bet.user.avatar }}" class="tipster_image detalles-blancos"
+                                                    alt="User Image" />
+
+                                                <div class="hidden-xs">{{bet.bet.user.username}}</div>
+
+                                            </div>
+
+                                        </a>
+
+                                        
+                                    </div>
+
+                                    <div class="col_8 border_no_bottom">
+                                        <div *ngIf="bet.picks">
+                                            <div class="negrita">
+                                                {{details[bet.id].date|date:"dd-MM-yyyy"}}
+                                            </div>
+                                            <div>
+                                                {{details[bet.id].date|date:"HH:mm"}}
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                    <div class="col_20 border_no_bottom" *ngIf="bet.picks && bet.picks.length==1">
+                                        <div class="image_size">
+
+                                            <div class="pull-left">
+                                                <img *ngIf="bet.picks[0].event.competition.country.image!=''" title="{{bet.picks[0].event.competition.country.name}}" src="{{ url + 'country/country-image/' + bet.picks[0].event.competition.country.image }}"
+                                                />
+
+
+                                                <img *ngIf="bet.picks[0].event.competition.sport.image!=''" title="{{bet.picks[0].event.competition.sport.name}}" src="{{ url + 'sport/sport-image/' + bet.picks[0].event.competition.sport.image }}"
+                                                />
+
+                                            </div>
+
+
+                                            <div class="pull-right">
+
+
+                                                <strong class="">
+                                                    {{bet.picks[0].event.competition.name}}
+                                                    <p class="text-muted">
+                                                        {{bet.picks[0].event.competition.country.name}}, {{bet.picks[0].event.competition.sport.name}}
+                                                    </p>
+                                                </strong>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col_50 border_no_bottom pointer" *ngIf="bet.picks && bet.picks.length>1" (click)="showCombi(bet.id)">
+                                        <div class="negrita letra_grande">
+                                            COMBINADA ({{details[bet.id].description}})
+                                        </div>
+                                        <div>
+                                            <span class="glyphicon glyphicon-chevron-down"></span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col_15 border_no_bottom" *ngIf="bet.picks && bet.picks.length==1">
+                                        <div class="negrita">{{bet.picks[0].event.name}}</div>
+
+                                    </div>
+                                    <div class="col_15 border_no_bottom" *ngIf="bet.picks && bet.picks.length==1">
+
+
+                                        <i *ngIf="modifiedPickId!=null &&  modifiedPickId==bet.picks[0].id" class="fa fa-fw fa-check-circle bg-gris float-left "></i>
+                                        <div contenteditable="true" id="pickEditable{{bet.picks[0].id}}" class="negrita" (keydown)="disableEnter(bet.picks[0].id)"
+                                            (blur)="changePick(bet.id,bet.picks[0].id)">{{bet.picks[0].pick}}</div>
+
+                                    </div>
+
+                                    <div [ngClass]="{'col_6 border_no_bottom':true, 'bg_acierto': details[bet.id].result==1 ||(bet.picks.length==1 && modifiedOddId && modifiedOddId==bet.picks[0].id ),'bg_fallo': details[bet.id].result==2,
+                                        'bg_nulo': details[bet.id].result==3,'bg_semifallo': details[bet.id].result==4,'bg_semiacierto': details[bet.id].result==5}">
+                                        <!--
+                                        <div (click)="WidgetOdd(bet.picks[0].id)" class="text-left"> Si.aqui:</div>
+                                        <div class="collapse" id="widget-odd{{bet.picks[0].id}}">
+                                            <div class="input-group input-group-md">
+                                                <input type="text" class="form-control" placeholder="Escriba aqui..." >
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-primary btn-flat" >Añadir</button>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+-->
+                                        <div *ngIf="bet.picks.length>1" class="negrita">@{{details[bet.id].odd}}
+                                        </div>
+                                        <div *ngIf="bet.picks.length==1" (click)="showWidgetOdd(bet.picks[0].id)" class="negrita">@{{details[bet.id].odd}}
+                                        </div>
+                                        <div *ngIf="bet.picks.length==1" class="collapse" id="widget-odd{{bet.picks[0].id}}" [ngClass]="{'bg-green': modifiedOddId && modifiedOddId==bet.picks[0].id }">
+                                            <input type="number" class="form-control padding_3" name="odd" #odd="ngModel" [(ngModel)]="bet.picks[0].odd" min=1 step=0.01
+                                                value=0.0 (blur)="changeOdd(bet.id,bet.picks[0].id)">
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col_8 border_no_bottom">
+
+                                            <div (click)="showWidgetResult(bet.picks[0].id)" class="negrita pointer">
+                                                <div *ngIf="bet.picks && details">
+                                                    <span *ngIf="details[bet.id].result==0" class="label bg-gray">Pendiente</span>
+                                                    <span *ngIf="details[bet.id].result==1" class="label bg-green disabled">Acierto</span>
+                                                    <span *ngIf="details[bet.id].result==2" class="label label-danger">Fallo</span>
+                                                    <span *ngIf="details[bet.id].result==3" class="label label-primary">Nulo</span>
+                                                    <span *ngIf="details[bet.id].result==4" class="label bg-teal">Semiacierto</span>
+                                                    <span *ngIf="details[bet.id].result==5" class="label label-warning">Semifallo</span>
+                                                    <span *ngIf="details[bet.id].result==6" class="label bg-teal">Acierto+</span>
+                                                    <span *ngIf="details[bet.id].result==7" class="label bg-teal">Fallo+</span>
+                                                    <span *ngIf="details[bet.id].result==8" class="label bg-teal">Nulo+</span>
+                                                    <span *ngIf="details[bet.id].result==9" class="label bg-teal">Semiacierto+</span>
+                                                    <span *ngIf="details[bet.id].result==10" class="label bg-teal">Semifallo+</span>
+                                                    <span *ngIf="details[bet.id].result==11" class="label bg-gray">Realizado</span>
+                                                    <span *ngIf="details[bet.id].result==12" class="label bg-black">Descartado</span>
+                                                    
+                                                </div>
+                                            </div>
+                                            <div *ngIf="bet.picks.length==1" class="collapse" id="widget-result{{bet.picks[0].id}}">
+                                                Confirmar resultado:
+                                                <select class="form-control" name="selectResult" #selectResult="ngModel" [(ngModel)]="bet.picks[0].result" (change)="setResultPick(bet.id,bet.picks[0].id)">
+                                                        <!-- (change)="setResultPick(bet.id,bet.picks[0].id,selectResult.value)" -->
+                                                    <option value=11 >Realizado</option>
+                                                    <option value=6 >Acertado</option>
+                                                    <option value=7 >Fallado</option>
+                                                    <option value=8 >Nulo</option>
+                                                    <option value=9 >Semiacierto</option>
+                                                    <option value=10 >Semifallo</option>
+                                                </select>
+                                            </div>
+
+
+
+                                        
+
+                                    </div>
+                                    <div [ngClass]="{'col_5 border_no_bottom':true, 'bg-green': modifiedAmountId && modifiedAmountId==bet.id }">
+                                        <div (click)="showWidgetAmount(bet.id)" class="negrita">
+                                            {{bet.amount}} €
+                                        </div>
+                                        <div class="collapse" id="widget-amount{{bet.id}}" [ngClass]="{'bg-green': modifiedAmountId && modifiedAmountId==bet.id }">
+                                            <input type="number" class="form-control padding_3" name="amount" #amount="ngModel" [(ngModel)]="bet.amount" min=1 step=1
+                                                value=0.0 (blur)="changeAmount(bet.id)">
+                                        </div>
+
+                                    </div>
+                                    <div class="col_9 border_no_bottom">
+                                        <div (click)="showWidgetBookie(bet.id)" class="negrita">
+                                            <div *ngIf="bet.bookie" class="image_size_big">
+                                                <img *ngIf="bet.bookie.image!=''" title="{{bet.bookie.name}}" src="{{ url + 'bookie/bookie-image/' + bet.bookie.image }}"
+                                                />
+                                                <span *ngIf="!bet.bookie.image">{{bet.bookie.name}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="collapse" id="widget-bookie{{bet.id}}">
+                                                <select class="form-control" name="selectBookie" #selectBookie="ngModel" [(ngModel)]="bookieSelected" (change)="changeBookie(bet.id)">
+                                                        <option *ngFor="let b of bookiesList" value='{{b.id}}' >{{b.name}}</option>
+                                                    </select>
+                                        </div>
+
+
+
+                                    </div>
+                                    <div class="col_8 border_no_bottom">
+                                        <a [routerLink]="['/pick/', bet.id ]"><span class="badge badge-pill bg-blue pointer">Ver mas
+                                                <i class="fa fa-fw fa-plus"></i> </span>
+                                            </a>
+                                            <br>
+                                                
+                                            <div *ngIf="details[bet.id].result==0" class="label bg-gray pointer" (click)="setResultBet(bet.id,11)" >Confirmar</div>
+                                            <div *ngIf="details[bet.id].result!=12" class="label label-danger pointer" (click)="setResultBet(bet.id,12)" >Descartar</div>
+                                            
+                                        <!-- <span class="badge badge-pill bg-orange pointer">Modificar</span> -->
+                                        <div *ngIf="bet.bet&&bet.bet.user" class="hidden-xs pointer" (click)="showOriginal(bet.bet.id)">
+                                                ver original
+                                            </div>
+                                    </div>
+
+
+
+
+
+
+                                </div>
+
+                                <div class="clear"></div>
+
+                                <!--
+                             Seccion de la combinada si existe, inicialmente oculta
+                             -->
+                                <ul *ngIf="bet.picks && bet.picks.length>1" class="collapse lista_combinadas centrado" id="combinada{{bet.id}}">
+
+                                    <li *ngFor="let pick of bet.picks">
+                                        <div class="row sin_margen">
+
+                                            <div class="col_6">
+                                                <i class="fa fa-fw fa-arrow-right margin-top-15 pull-right"></i>
+                                            </div>
+                                            <div class="col_8 border_top">
+                                                <div *ngIf="pick.event ">
+                                                    <div class="negrita">
+                                                        {{pick.event.date|date:"dd-MM-yyyy"}}
+                                                    </div>
+                                                    <div>
+                                                        {{pick.event.date|date:"H:mm"}}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col_20 border_top">
+                                                <div *ngIf="pick.event ">
+                                                    <strong class="">
+                                                        {{pick.event.competition.name}}
+                                                        <p class="text-muted">
+                                                            {{pick.event.competition.country.name}}, {{pick.event.competition.sport.name}}
+                                                        </p>
+                                                    </strong>
+                                                </div>
+                                            </div>
+                                            <div class="col_15 border_top">
+                                                <div *ngIf="pick.event ">{{pick.event.name}}</div>
+                                            </div>
+                                            <div class="col_15 border_top">
+
+                                                    <i *ngIf="modifiedPickId!=null &&  modifiedPickId==pick.id" class="fa fa-fw fa-check-circle bg-gris float-left "></i>
+                                                    <div contenteditable="true" id="pickEditable{{pick.id}}" class="negrita" (keydown)="disableEnter(pick.id)"
+                                                        (blur)="changePick(bet.id,pick.id)">{{pick.pick}}</div>
+
+                                            </div>
+                                            <div [ngClass]="{'col_6 border_top':true,'bg-green': modifiedOddId && modifiedOddId==pick.id }">
+
+                                                <div (click)="showWidgetOdd(pick.id)" class="negrita">@{{pick.odd}}
+                                                </div>
+                                                <div class="collapse" id="widget-odd{{pick.id}}" [ngClass]="{'bg-green': modifiedOddId && modifiedOddId==pick.id }">
+                                                    <input type="number" class="form-control padding_3" name="odd" #odd="ngModel" [(ngModel)]="pick.odd" min=1 step=0.01 value=0.0
+                                                        (blur)="changeOdd(bet.id,pick.id)">
+                                                </div>
+
+                                            </div>
+                                            <div class="col_8 border_top">
+                                                    <div (click)="showWidgetResult(pick.id)" class="negrita">
+                                                            <div *ngIf="pick">
+                                                                <span *ngIf="pick.result==0" class="label bg-gray">Pendiente</span>
+                                                                <span *ngIf="pick.result==1" class="label bg-green disabled">Acierto</span>
+                                                                <span *ngIf="pick.result==2" class="label label-danger">Fallo</span>
+                                                                <span *ngIf="pick.result==3" class="label label-primary">Nulo</span>
+                                                                <span *ngIf="pick.result==4" class="label bg-teal">Semiacierto</span>
+                                                                <span *ngIf="pick.result==5" class="label label-warning">Semifallo</span>
+                                                                <span *ngIf="pick.result==6" class="label bg-teal">Acierto+</span>
+                                                                <span *ngIf="pick.result==7" class="label bg-teal">Fallo+</span>
+                                                                <span *ngIf="pick.result==8" class="label bg-teal">Nulo+</span>
+                                                                <span *ngIf="pick.result==9" class="label bg-teal">Semiacierto+</span>
+                                                                <span *ngIf="pick.result==10" class="label bg-teal">Semifallo+</span>
+                                                                <span *ngIf="pick.result==11" class="label bg-gray">Realizado</span>
+                                                                <span *ngIf="pick.result==12" class="label bg-black">Descartado</span>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="collapse" id="widget-result{{pick.id}}">
+                                                            Confirmar resultado:
+                                                            <select class="form-control" name="selectResult" #selectResult="ngModel" [(ngModel)]="pick.result" (change)="setResultPick(bet.id,pick.id)">
+                                                                    <!-- (change)="setResultPick(bet.id,pick.id,selectResult.value)" -->
+                                                                <option value=11 >Realizado</option>
+                                                                <option value=6 >Acertado</option>
+                                                                <option value=7 >Fallado</option>
+                                                                <option value=8 >Nulo</option>
+                                                                <option value=9 >Semiacierto</option>
+                                                                <option value=10 >Semifallo</option>
+                                                            </select>
+                                                        </div>
+
+
+                                                
+                                            </div>
+                                            <div class="col_10">
+                                                    <div *ngIf="pick">
+                                                            <div *ngIf="pick.result==0" class="label bg-gray pointer" (click)="setResultPick(bet.id,pick.id,11)" >Confirmar pick</div>
+                                                            <div *ngIf="pick.result!=12" class="label label-danger pointer" (click)="setResultPick(bet.id,pick.id,12)" >Descartar pick</div>
+                                                        </div>  
+                                                </div>
+                                            <div class="col_10">
+
+                                            </div>
+
+                                        </div>
+
+                                    </li>
+                                </ul>
+
+                                <!--
+                             Seccion de la apuesta original, inicialmente oculta
+                             -->
+                                <ul *ngIf="bet.bet && bet.bet.picks && bet.bet.picks.length>0" class="collapse lista_combinadas centrado bg_aliceblue" id="originalBet{{bet.bet.id}}">
+
+                                    <li *ngFor="let opick of bet.bet.picks;index as i">
+                                        <div class="row sin_margen">
+
+                                            <div class="col_6">
+                                                <i class="fa fa-fw fa-arrow-right margin-top-15 pull-right"></i>
+                                            </div>
+                                            <div class="col_8 border_top">
+                                                <div *ngIf="bet.picks[i] ">
+                                                    <div class="negrita">
+                                                        {{bet.picks[i].event.date|date:"dd-MM-yyyy"}}
+                                                    </div>
+                                                    <div>
+                                                        {{bet.picks[i].event.date|date:"H:mm"}}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col_20 border_top">
+                                                <div *ngIf="bet.picks[i] ">
+                                                    <strong class="">
+                                                        {{bet.picks[i].event.competition.name}}
+                                                        <p class="text-muted">
+                                                            {{bet.picks[i].event.competition.country.name}}, {{bet.picks[i].event.competition.sport.name}}
+                                                        </p>
+                                                    </strong>
+                                                </div>
+                                            </div>
+                                            <div class="col_15 border_top">
+                                                <div *ngIf="bet.picks[i] ">{{bet.picks[i].event.name}}</div>
+                                            </div>
+                                            <div class="col_15 border_top">
+                                                <div *ngIf="opick ">{{opick.pick}}</div>
+                                            </div>
+                                            <div class="col_6 border_top">
+                                                <div *ngIf="opick ">@{{opick.odd}}
+                                                </div>
+                                            </div>
+                                            <div class="col_8 border_top">
+                                                <div *ngIf="opick">
+                                                    <span *ngIf="opick.result==0" class="label bg-gray">Pendiente</span>
+                                                    <span *ngIf="opick.result==1" class="label bg-green">Acierto</span>
+                                                    <span *ngIf="opick.result==2" class="label label-danger">Fallo</span>
+                                                    <span *ngIf="opick.result==3" class="label label-primary">Nulo</span>
+                                                    <span *ngIf="opick.result==4" class="label bg-teal">Semiacierto</span>
+                                                    <span *ngIf="opick.result==5" class="label label-warning">Semifallo</span>
+                                                </div>
+                                            </div>
+                                            <div class="col_5 border_top">
+
+                                                <div *ngIf="i==0">
+                                                    STAKE:
+                                                </div>
+                                                <div *ngIf="i==0">
+                                                    {{bet.bet.stake}}
+                                                </div>
+                                            </div>
+                                            <div class="col_9 border_top">
+                                                <div *ngIf="i==0">
+                                                    {{bet.bet.bookie.name}}
+                                                </div>
+                                            </div>
+                                            <div class="col_8 border_top">
+                                                <div *ngIf="i==0">
+                                                    ACCIONES
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>

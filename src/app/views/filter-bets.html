@@ -1,0 +1,116 @@
+<div class="row">
+
+
+    <div class="col-md-12" name="details">
+
+
+
+        <div class="box-body">
+            <form role="form" #searchForm="ngForm">
+                <div class="row">
+                    <div class="form-group col-md-2">
+                        <label>Fecha inicial </label>
+                        <div class="input-group">
+                            <select class="form-control" name="selectStartDate" #selectStartDate="ngModel" [(ngModel)]="startDate" (change)="loadDates()">
+                                        <option value="thismonth"  >Mes actual</option>
+                                        <option value="all">Todo</option>
+                                        <option *ngFor="let s of startPeriod" value='{{s.name}}' >{{s.name}}</option>
+                                    </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Fecha final </label>
+                        <div class="input-group">
+                            <select class="form-control" name="selectEndDate" #selectEndDate="ngModel" [(ngModel)]="endDate" (change)="filterBets()"
+                                [disabled]="!startDate||startDate=='thismonth'||startDate=='all'">
+                                        <option value="startdate">Mes seleccionado</option> 
+                                        <option *ngFor="let e of endPeriod" value='{{e.name}}' >{{e.name}}</option>
+                                    </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label for="inputPick">Pronostico</label>
+                        <input type="text" class="form-control" name="pick" [(ngModel)]="pickName" placeholder="Pick search..." (keyup)="filterBets()">
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label>Select  competicion</label>
+                        <select class="form-control" name="selectCompetition" #selectCompetition="ngModel" [(ngModel)]="competition" (change)="filterBets()">
+                                        <option value="">Todas</option>
+                                        <option *ngFor="let competition of competitionsList" value='{{competition.id}}' >{{competition.name}}</option>
+                                </select>
+                    </div>
+
+
+                    <div class="form-group col-md-2">
+                        <label>Tipo apuesta:</label>
+                        <select class="form-control" [disabled]="true" name="type" [(ngModel)]="type" (change)="filterBets()">
+                                                <option value="">Todas</option>
+                                                <option value="simple">Sencilla</option>
+                                                <option value="combi">Combinada</option>
+                                                <option value="live">Live</option>
+                                            </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Estado</label>
+                        <select class="form-control" name="status" [(ngModel)]="status" (change)="filterBets()">
+                                              <option value="">Todos</option>
+                                              <option value="1">Finalizado</option>
+                                              <option value="00">Pendiente</option>
+                                            </select>
+                    </div>
+
+                    <div class="form-group col-md-2">
+
+
+
+                    </div>
+                </div>
+                <div class="row" *ngIf="showAllFilters">
+                    <div class="form-group col-md-2">
+                        <label>Pais</label>
+                        <select class="form-control" name="selectCountry" #selectCountry="ngModel" [(ngModel)]="country" (change)="filterBets()">
+                                <option value="">Todas</option>
+                                <option *ngFor="let country of countriesList" value='{{country.id}}' >{{country.name}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Deporte</label>
+                        <select class="form-control" name="selectSport" #selectSport="ngModel" [(ngModel)]="sport" (change)="filterBets()">
+                                <option value="">Todas</option>
+                                <option *ngFor="let sport of sportsList" value='{{sport.id}}' >{{sport.name}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Cuota</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Bookie</label>
+                        <select class="form-control" name="selectBookie" #selectBookie="ngModel" [(ngModel)]="bookie" (change)="filterBets()">
+                                <option value="">Todas</option>
+                                <option *ngFor="let bookie of bookiesList" value='{{bookie.id}}' >{{bookie.name}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Stake</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Tipster</label>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="box-footer text-center padding-none">
+            <div class="col-sm-12">
+                <a *ngIf="!showAllFilters" (click)="showMoreSearchOptions()" href="javascript:void(0)">Mostrar más opciones de búsqueda</a>
+                <a *ngIf="showAllFilters" (click)="showMoreSearchOptions()" href="javascript:void(0)">Mostrar menos opciones de búsqueda</a>
+            </div>
+        </div>
+
+        <!-- /.box -->
+    </div>
+    <!-- /.col (left) -->
+
+</div>

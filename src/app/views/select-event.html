@@ -1,0 +1,343 @@
+<div class="mensaje_fijo col-md-6">
+    <div class="alert alert-success alert-dimissible" *ngIf="success!=null">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> {{success}}
+    </div>
+    <div class="alert alert-danger alert-dimissible" *ngIf="error!=null">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> {{error}}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-default box-solid" name="selectSport">
+            <div class="box-header with-border" data-toggle="collapse" data-target="#widget-sport">
+                <h3 class="box-title">Selecciona deporte</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool"><span class="glyphicon glyphicon-chevron-down"></span>
+            </button>
+                </div>
+                <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="collapse" id="widget-sport">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" placeholder="Buscar deporte" [(ngModel)]="sportFilter" (keyup)="filterSports()" (blur)="filterSports()">
+                                <span class="input-group-btn">
+                            <button type="button" class="btn btn-danger btn-flat" (click)="cleanSportFilter()">Borrar filtros</button>
+                        </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="sportsList.length==0">
+                        <h5>No se encontraron deportes...</h5>
+                    </div>
+                    <div *ngIf="sportsList.length>0">
+
+                        <ul class="pagination inline">
+                            <li *ngFor="let sp of sportsList| paginate: { itemsPerPage: itemsSportPaginate, currentPage: 1 }" class="col_20_resp">
+                                <a data-toggle="collapse" data-target="#widget-sport" (click)="assignSport(sp.id)" [ngClass]="{'altura_fija_2 ancho_fijo image_size':true,'selected':sport && sport.id==sp.id }">
+                                    <img *ngIf="sp.image != ''" src="{{ url + 'sport/sport-image/' + sp.image }}" />
+                                    <div>{{sp.name}}</div></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer text-center padding-none">
+                    <div class="col-sm-4 ">
+                        <a href="javascript:void(0)" (click)="showMoreSports()" class="uppercase">Mostrar más deportes</a>
+                    </div>
+                    <div class="col-sm-8 bg-gray padding_10 ">
+                        <div data-toggle="collapse" data-target="#widget-newSport" class="text-left"> Si no encuentra un deporte, creelo aqui:</div>
+                        <div class="collapse" id="widget-newSport">
+                            <div class="input-group input-group-md">
+                                <input type="text" class="form-control" placeholder="Escriba aqui..." [(ngModel)]="sport.name" (keyup)="filterSports()" (blur)="filterSports()">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-primary btn-flat" (click)="saveSport()">Añadir</button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="box box-default box-solid" name="selectCountry">
+            <div class="box-header with-border" data-toggle="collapse" data-target="#widget-country">
+                <h3 class="box-title">Selecciona país</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool"><span class="glyphicon glyphicon-chevron-down"></span>
+            </button>
+                </div>
+                <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="collapse" id="widget-country">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" placeholder="Buscar país" [(ngModel)]="countryFilter" (keyup)="filterCountries()"
+                                    (blur)="filterCountries()">
+                                <span class="input-group-btn">
+                                <button type="button" class="btn btn-danger btn-flat" (click)="cleanCountryFilter()">Borrar filtros</button>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="countriesList.length==0">
+                        <h5>No se encontraron paises...</h5>
+                    </div>
+                    <div *ngIf="countriesList.length>0">
+
+                        <ul class="pagination inline">
+                            <li *ngFor="let c of countriesList| paginate: { itemsPerPage: itemsCountryPaginate, currentPage: 1 }" class="col_20_resp">
+                                <a data-toggle="collapse" data-target="#widget-country" (click)="assignCountry(c.id)" [ngClass]="{'altura_fija_2 ancho_fijo image_size':true,'selected':  country && country.id==c.id }">
+                                    <img *ngIf="c.image != ''" src="{{ url + 'country/country-image/' + c.image }}" />
+                                    <div>{{c.name}}</div></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer text-center padding-none">
+                    <div class="col-sm-4 ">
+                        <a href="javascript:void(0)" (click)="showMoreCountries()" class="uppercase">Mostrar más paises</a>
+                    </div>
+                    <div class="col-sm-8 bg-gray padding_10 ">
+                        <div data-toggle="collapse" data-target="#widget-newCountry" class="text-left"> Si no encuentra un país, puede añadirlo aqui:</div>
+                        <div class="collapse" id="widget-newCountry">
+                            <div class="input-group input-group-md">
+                                <input type="text" class="form-control" placeholder="Escriba aqui..." [(ngModel)]="country.name" (keyup)="filterCountries()"
+                                    (blur)="filterCountries()">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-primary btn-flat" (click)="saveCountry()">Añadir</button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="box box-default box-solid" name="selectCompetition">
+    <div class="box-header with-border " data-toggle="collapse" data-target="#widget-competition">
+        <h3 class="box-title">Selecciona competición</h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool"><span class="glyphicon glyphicon-chevron-down"></span>
+        </button>
+        </div>
+        <!-- /.box-tools -->
+    </div>
+    <!-- /.box-header -->
+    <div class="collapse in" id="widget-competition">
+        <div class="box-body ">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" placeholder="Buscar competición" [(ngModel)]="competitionFilter" (keyup)="filterCompetitions()"
+                            (blur)="filterCompetitions()">
+                        <span class="input-group-btn">
+                        <button type="button" class="btn btn-danger btn-flat" (click)="cleanCompetitionFilter()">Borrar filtros</button>
+                    </span>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <span *ngIf="country.id" class="badge bg-red margin-top-7 pointer" (click)="cleanCompetitionFilter('c')">{{country.name}} <i class="fa fa-fw fa-remove"></i> </span>
+                    <span *ngIf="sport.id" class="badge bg-red margin-top-7 pointer" (click)="cleanCompetitionFilter('s')">{{sport.name}} <i class="fa fa-fw fa-remove"></i> </span>
+                </div>
+            </div>
+
+            <div *ngIf="competitionsList.length==0">
+                <h5>No se encontraron competiciones...</h5>
+            </div>
+
+            <div *ngIf="competitionsList.length>0">
+
+                <ul class="pagination inline">
+                    <li *ngFor="let competi of competitionsList| paginate: { itemsPerPage: itemsCompetiPaginate, currentPage: 1 }" class="col_10_resp">
+                        <a data-toggle="collapse" data-target="#widget-competition" (click)="assignCompetition(competi.id)" [ngClass]="{'altura_fija_2 ancho_fijo centrar-verticalmente':true,'selected': competition && competi.id==competition.id }">
+                            <div>{{competi.name}}</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer text-center padding-none">
+            <div class="col-sm-4 ">
+                <a href="javascript:void(0)" (click)="showMoreCompetitions()" class="uppercase">Mostrar más competiciones</a>
+            </div>
+            <div class="col-sm-8 bg-gray padding_10 ">
+                <div data-toggle="collapse" data-target="#widget-newCompeti" class="text-left"> Si no encuentra una competicion, puede añadirla aqui:</div>
+                <div class=" collapse" id="widget-newCompeti">
+                    <div class="col-md-3">
+                        <span *ngIf="sport.name">Deporte:<label>{{sport.name}}</label></span>
+                        <label *ngIf="!sport.name">Debe seleccionar un deporte</label>
+                    </div>
+                    <div class="col-md-3">
+                        <span *ngIf="country.name">Pais:<label>{{country.name}}</label></span>
+                        <label *ngIf="!country.name">Debe seleccionar un pais</label>
+                    </div>
+                    <div class="input-group input-group-md col-md-6">
+                        <input type="text" class="form-control" placeholder="Escriba aqui..." [(ngModel)]="competition.name" (keyup)="filterCompetitions(competition.name)"
+                            (blur)="filterCompetitions(competition.name)">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-flat" (click)="saveCompetition()">Añadir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- ///////LISTA DE EVENTOS/////// -->
+    <div class="col-md-12">
+        <div class="box box-primary box-solid">
+            <div class="box-header with-border " data-toggle="collapse" data-target="#widget-event">
+                <h3 class="box-title">Selecciona el evento</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool"><span class="glyphicon glyphicon-chevron-down"></span>
+                        </button>
+                </div>
+                <!--  
+                    <div class="box-tools">
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                              <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+            
+                              <div class="input-group-btn">
+                                <button type="submit" class="btn btn-info"><i class="fa fa-search"></i></button>
+                              </div>
+                            </div>
+                            
+                          </div>
+
+                     <!--     
+                    
+                     /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="collapse in" id="widget-event">
+                <div class="box-body ">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" placeholder="Buscar evento" [(ngModel)]="eventFilter" (keyup)="filterEvents()" (blur)="filterEvents()">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-danger btn-flat" (click)="cleanEventFilter()">Borrar filtros</button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <span *ngIf="competition.id" class="badge bg-red margin-top-7 pointer" (click)="cleanEventFilter('c')">{{competition.name}} {{competition.country.name}} {{competition.sport.name}} <i class="fa fa-fw fa-remove"></i> </span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="eventsList.length==0">
+                        <h5>No se encontraron eventos...</h5>
+                    </div>
+
+                    <table *ngIf="eventsList.length>=1" class="table table-bordered table-hover dataTable centrado" role="grid">
+                        <thead>
+                            <tr role="row" class="bg-gray ">
+                                <th rowspan="1" colspan="1" class="col-md-3">Evento
+
+                                </th>
+                                <th rowspan="1" colspan="1" class="col-md-3">Fecha
+                                    <div class="flota-derecha">
+                                        <i class="fa fa-arrow-circle-up pointer" (click)="ordenarEventos('date','asc')"></i>
+                                        <i class="fa fa-arrow-circle-down pointer" (click)="ordenarEventos('date','desc')"></i>
+                                    </div>
+                                </th>
+                                <th>
+                                    Competición
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let e of eventsList| paginate: { itemsPerPage: itemsEventPaginate, currentPage: 1 }" [ngClass]="{'pointer': true, ' bg-blue ': e && e.id==event.id }"
+                                (click)="assignEvent(e.id)">
+                                <td>
+                                    {{e.name}}
+                                </td>
+                                <td>
+                                    <div>{{e.date|date:'dd-MM-yyyy H:mm'}}
+                                    </div>
+                                </td>
+                                <td>
+                                    {{e.competition.name}} ({{e.competition.sport.name}}:{{e.competition.country.name}})
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- <div  *ngFor="let competi of listaCompeticiones">
+                        <button type="button" data-toggle="collapse" data-target="#widget-competicion" [ngClass]="{'btn bg-default altura_fija image_size':true, 'selected': competicionSeleccionada && competi.id==competicionSeleccionada.id } " (click)="asignarCompeticion(competi.id)">
+                            
+                            <div>{{competi.nombre}}</div>
+                        </button>
+                    </div>-->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                    <div class="col-sm-4 ">
+                        <a href="javascript:void(0)" (click)="showMoreEvents()" class="uppercase">Mostrar más eventos</a>
+                    </div>
+                    <div class="col-sm-8 bg-gray padding_10 ">
+                        <div data-toggle="collapse" data-target="#widget-newEvent" class="text-left"> Si no encuentra un evento, puede añadirlo aqui:</div>
+
+                        <div class=" collapse" id="widget-newEvent"><br>
+                            <div class="col-md-4">
+                                <div *ngIf="competition">Competicion:<label>{{competition.name}}</label></div>
+                                <div *ngIf="competition.sport">Deporte:<label>{{competition.sport.name}}</label></div>
+                                <div *ngIf="competition.country">Pais:<label>{{competition.country.name}}</label></div>
+                                <label *ngIf="!competition.name" (click)="scrollToAnchor('selectCompetition')">Debe seleccionar una competición.</label>
+                            </div>
+
+                            <div class="input-group input-group-md col-md-5">
+                                <span>Fecha y hora del evento:
+                                            <!-- Evento  -->
+                                            <label>{{newEvent.date|date:'dd-MM-yyyy H:mm'}}</label></span>
+                                <input type="datetime-local" class="form-control" name="eventDate" #eventDate="ngModel" [(ngModel)]="newEvent.date" />
+
+                                <input type="text" class="form-control" placeholder="Escriba aqui el evento..." [(ngModel)]="newEvent.name" (keyup)="filterEvents()"
+                                    (blur)="filterEvents()">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-primary btn-flat" (click)="saveEvent()">Añadir</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /////eventos -->
+
+    <div class="col-md-4">
+
+
+    </div>
+</div>
+<!-- /row -->

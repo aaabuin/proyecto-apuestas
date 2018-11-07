@@ -1,0 +1,29 @@
+<div class="content">
+
+
+
+    <div class="col-md-10 col-md-offset-1">
+        <!-- Custom Tabs -->
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li [routerLinkActive]="['active']"><a [routerLink]="['sports']">Deportes</a></li>
+                <li [routerLinkActive]="['active']"><a [routerLink]="['countries']">Paises</a></li>
+                <li [routerLinkActive]="['active']"><a [routerLink]="['competitions']">Competiciones</a></li>
+                <li [routerLinkActive]="['active']"><a [routerLink]="['events']">Eventos</a></li>
+                <li [routerLinkActive]="['active']"><a [routerLink]="['bookies']">Bookies</a></li>
+
+            </ul>
+            <div class="tab-content">
+
+                <div class="content">
+                    <router-outlet></router-outlet>
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+        </div>
+        <!-- nav-tabs-custom -->
+    </div>
+
+
+</div>

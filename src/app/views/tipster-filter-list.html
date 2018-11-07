@@ -1,0 +1,53 @@
+<div class="box box-default box-solid" name="selectSport">
+    <div class="box-header with-border" data-toggle="collapse" data-target="#widget-tipsters">
+        <h3 class="box-title">Mi lista de tipsters</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool"><span class="glyphicon glyphicon-chevron-down"></span>
+            </button>
+        </div>
+        <!-- /.box-tools -->
+    </div>
+    <!-- /.box-header -->
+    <div class="collapse" id="widget-tipsters">
+        <div class="box-body">
+
+
+            <div *ngIf="tipstersList.length==0">
+                <h5>No se encontraron tipsters...</h5>
+            </div>
+            <div *ngIf="tipstersList.length>0">
+
+                <ul class="pagination inline">
+                        <li *ngFor="let tipster of tipstersList"
+                        class="col_20_resp">
+                        <a (click)="assignTipster(tipster.user)" [ngClass]="{' ancho_fijo image_size':true,'selected':tipsterSelected && tipsterSelected.id==tipster.user.id }">
+
+                            <div class="col-md-7">
+                                    <div class="margin_bottom_5">
+                                        {{tipster.user.username}}
+                                    </div>
+
+                                <div class="selected margin_bottom_5">
+                                        <div class="bg-light-blue col_70 padding_3">Apuestas:</div>
+                                        <div class="col_30  color_black padding_3">{{tipster.numPicks}}</div>
+                                        
+    
+                                        <div class="clear"></div>
+                                    </div>
+                            </div>
+                            <div class="col-md-5 height_80" [chart]="yieldChart[tipster.user.username]"></div>
+                        </a>
+                    </li>
+                    <li class="col_20_resp">
+                        <a (click)="removeTipster(tipster)"  [ngClass]="{'altura_fija_2 ancho_fijo':true,'selected':!tipsterSelected }">
+
+                            <div>Todos</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- /.box-body -->
+
+    </div>
+</div>

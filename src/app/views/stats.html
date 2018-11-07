@@ -1,0 +1,182 @@
+<!-- /.col -->
+<div class="col-md-12 ">
+
+    <div class="row">
+
+
+        <div class="col-xs-12">
+            <div class="box box-solid">
+
+                <div class=" box-body">
+
+
+                    <div class="col-md-2 box-profile">
+                        <img *ngIf="!tipster||!tipster.avatar||tipster.avatar==''" class="profile-user-img img-responsive img-circle" src="{{url}}user/user-image/default2.png"
+                            alt="User profile picture">
+                        <img *ngIf="tipster&&tipster.avatar&&tipster.avatar!=''" class="profile-user-img img-responsive img-circle" src="{{url}}user/user-image/{{tipster.avatar}}"
+                            alt="User profile picture">
+
+                        <h3 class="profile-username text-center" *ngIf="tipster">{{tipster.username}}</h3>
+
+                        <ul class="list-group list-group-unbordered">
+                            <li *ngIf="tipster&&identity&&tipster.id!=identity.id&&!subscription.id" class="list-group-item">
+                                <a href="#followTipster{{tipster.id}}Modal" data-toggle="modal" class="btn btn-primary btn-block"><b>Follow</b></a>
+                            </li>
+                            <li *ngIf="subscription.amount" class="list-group-item">
+                                <b>Importe por stake:</b> <a class="pull-right">{{subscription.amount}} €</a>
+                            </li>
+                            <li *ngIf="subscription.id" class="list-group-item">
+                                <a (click)="unfollow()" class="btn btn-danger btn-block"><b>Unfollow</b></a>
+                            </li>
+                        </ul>
+
+                        <div class="modal fade" id="followTipster{{tipster.id}}Modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-center" role="document">
+                                <div class="modal-content">
+
+
+
+                                    <!-- HEADEEEER -->
+
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">×</span>
+                                                                </button>
+                                        <h4 class="modal-title">Seguir a {{tipster.username}}</h4>
+                                    </div>
+
+
+
+                                    <!-- MODAL BODY -->
+
+                                    <div class="modal-body">
+
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Amount per stake:</label>
+
+                                            <div class="input-group">    
+                                                <input type="number" class="form-control"  name="amount" #amountPerStake="ngModel" [(ngModel)]="amount">
+                                                <span class="input-group-addon"><i class="fa fa-euro"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <!-- FOOTER -->
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="addFollow()">Guardar</button>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <!-- /.box-body -->
+
+
+
+
+
+
+                    <div class="col-md-10">
+
+                        <div class="box-header">
+                            <i class="fa fa-bar-chart-o"></i>
+
+                            <h3 class="box-title">Estadísticas</h3>
+
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+
+                            <div class="row">
+
+
+                                <div class="col-xs-12 col-md-5 alinear-centro borde_bajo_screen_xs borde_derecha">
+
+                                    <div class="col-xs-7 col-lg-9 row ">
+                                        <div class="bg-blue padding_8 negrita letra_grande margin_bottom_5"><span> Numero de apuestas:</span> {{numPicks}}</div>
+                                        <div class="bg-light-blue disabled padding_3 margen_lateral"><span> Aciertos:</span> {{numWins}}</div>
+                                        <div class="bg-light-blue disabled padding_3 margen_lateral"><span> Fallos:</span> {{numFails}}</div>
+                                        <div class="bg-light-blue disabled padding_3 margen_lateral"><span> Pendientes:</span> {{numPending}}</div>
+                                    </div>
+
+                                    <div>
+                                        <div class="col_30 ">
+                                            <div [chart]="winsChart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-5 alinear-centro borde_bajo_screen_xs borde_derecha">
+
+                                    <div class="col-xs-8 row ">
+                                        <div class="bg-blue padding_8 negrita letra_grande margin_bottom_5"><span>Unidades apostadas:</span> {{stakedUnits}}</div>
+                                        <div class="bg-light-blue padding_3 disabled margen_lateral"><span> Ganadas:</span> {{wonUnits}}</div>
+                                        <div class="bg-light-blue padding_3 disabled margen_lateral"><span> Perdidas:</span> {{lostUnits}}</div>
+                                        <div class="bg-light-blue padding_3 margen_lateral"><span> Balance:</span> {{profit}}</div>
+                                    </div>
+
+                                    <!--
+
+                                <input type="text" id="knob-aciertos" name="porcentaje_aciertos" class="knob" value="0" data-width="120" data-height="120"
+                                    data-fgcolor="rgb(0, 131, 255)" data-readonly="true" data-anglearc="250" data-angleoffset="-125" readonly="readonly" 
+                                    style="width: 64px; height: 40px; position: absolute; vertical-align: middle; margin-top: 40px; margin-left: -92px; border: 0px; background: none; font-style: normal; font-variant: normal; font-weight: bold; font-stretch: normal; font-size: 24px; line-height: normal; font-family: Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; -webkit-appearance: none;">
+                                <div class="texto-knob">% aciertos</div>
+
+                                -->
+                                    <div class="col_30 ">
+                                        <div [chart]="yieldChart"></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-xs-12 col-md-2 alinear-centro">
+
+                                    <div class="col-xs-6 col-md-12 row ">
+                                        <div class="bg-blue padding_8 negrita "><span> CUOTA MEDIA:</span></div>
+                                        <div class="bg-gray negrita padding_5 margin_bottom_5 "><span>{{oddAverage}}</span></div>
+                                    </div>
+                                    <div class="col-xs-6 col-md-12 row">
+                                        <div class="bg-blue padding_8 negrita  "><span> STAKE MEDIO</span></div>
+                                        <div class="bg-gray negrita padding_5 margin_bottom_5 "><span> {{stakeAverage}} </span> </div>
+                                    </div>
+
+
+                                </div>
+
+                                <!-- ./col -->
+                            </div>
+                            <!-- /.row -->
+
+
+
+
+
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+
+
+
+
+
+
+
+
+</div>

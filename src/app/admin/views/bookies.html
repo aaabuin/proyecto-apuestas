@@ -1,0 +1,126 @@
+
+<new-bookie></new-bookie>
+
+<div class="mensaje_fijo col-md-6">
+    <div class="alert alert-success alert-dimissible" *ngIf="success!=null">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        {{success}}
+    </div>
+    <div class="alert alert-danger alert-dimissible" *ngIf="error!=null">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        {{error}}
+    </div>
+</div>
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <small class="form-text text-muted">*Pulsar sobre el nombre para editar</small>
+            <table id="example1" class="table table-bordered table-hover dataTable centrado" role="grid">
+                <thead>
+                    <tr role="row" class="bg-gray ">
+
+                        <th rowspan="1" colspan="1" class="col-md-2">Nombre casa de apuestas
+                            <div class="flota-derecha">
+                                <i class="fa fa-arrow-circle-up pointer " (click)="orderBookie('name','asc')"></i>
+                                <i class="fa fa-arrow-circle-down pointer " (click)="orderBookie('name','desc')"></i>
+                            </div>
+
+                        </th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Imagen</th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Estado
+                            <div class="flota-derecha">
+                                <i class="fa fa-arrow-circle-up pointer " (click)="orderBookie('status','asc')"></i>
+                                <i class="fa fa-arrow-circle-down pointer " (click)="orderBookie('status','desc')"></i>
+                            </div>
+
+                        </th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Usuario</th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Fecha creacion</th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Acciones</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr role="row" *ngFor="let b of listaBookies">
+
+                        <th class="">
+                            <i *ngIf="modifiedBookie!=null && modifiedBookie==b.id" class="fa fa-fw fa-check-circle bg-gris float-left"></i>
+                            <div contenteditable="true" id="bookieEditable{{b.id}}" (keydown)="disableEnter(b.id)" (blur)="changeName(b.id)">{{b.name}}</div>
+                        </th>
+                        <td class="">
+
+                            <div class="image_size" *ngIf="b.image != ''">
+                                <img src="{{ url + 'bookie-image/' + b.image }}" />
+                                <span (click)="deleteBookieImage(b.id)" class="badge bg-orange pointer">Quitar imagen</span>
+                            </div>
+
+                            <div *ngIf="b.image == ''"><input type="file" class="fileinput" placeholder="Subir imagen" (change)="fileChangeEvent($event,b.id)"
+                                /></div>
+
+
+
+
+                        </td>
+                        <td class="">
+                            <span *ngIf="b.status==1">Activado</span>
+                            <span *ngIf="b.status==0">Desactivado</span>
+                            <span *ngIf="b.status==2">Pendiente de validación</span>
+                        </td>
+
+                        <td class="">
+                                <span *ngIf="b.userId">{{b.userId}}</span>
+                                <span *ngIf="!b.userId">Admin</span>
+                                
+                            </td>
+                            <td class="">
+                                <span *ngIf="b.createdAt">{{b.createdAt|date:'dd-MM-yyyy H:mm'}}</span>
+                                
+                            </td>
+
+                        <td>
+                            <span *ngIf="b.status!=1" class="badge badge-pill bg-green pointer" (click)="enableBookie(b.id)">Activar</span>
+                            <span *ngIf="b.status!=0" class="badge badge-pill pointer" (click)="disableBookie(b.id)">Desactivar</span>
+
+                            <a href="#deleteBookie{{b.id}}Modal" data-toggle="modal"> 
+                                                    <span class="badge badge-pill bg-red pointer" >Eliminar</span>
+                                            </a>
+
+
+                            <div class="modal fade" id="deleteBookie{{b.id}}Modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-center">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">×</span></button>
+
+                                            <h4 class="modal-title"> Confirmación de seguridad. </h4>
+
+                                        </div>
+
+
+                                        <div class="modal-body">
+                                            Va a borrar la casa de apuestas <b>{{b.name}}</b>. ¿Deseas continuar?
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" id="modalButtonClose" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteBookie(b.id)">Borrar</button>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </td>
+
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>

@@ -1,0 +1,102 @@
+<div class="content">
+
+    <h2 class="page-header">EDICION PERFIL</h2>
+
+
+    <div class="mensaje_fijo col-md-6">
+        <div class="alert alert-success alert-dimissible" *ngIf="success!=null">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {{success}}
+        </div>
+        <div class="alert alert-danger alert-dimissible" *ngIf="error!=null">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {{error}}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title"> Datos de usuario</h3>
+                </div>
+
+                <div class="box-body box-profile">
+                    <form #editUserForm="ngForm" (ngSubmit)="onSubmit('editUser')">
+                        <div class="form-group">
+                            <label>Nombre de usuario:</label>
+                            <input type="text" name="username" #name="ngModel" [(ngModel)]="user.username" class="form-control" disabled />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Correo electronico:</label>
+                            <input type="text" name="email" #email="ngModel" [(ngModel)]="user.email" class="form-control " disabled />
+                        </div>
+
+                        <label>Descripción:</label>
+                        <div class="form-group">
+                            <textarea name="description" #description="ngModel" [(ngModel)]="user.description" rows="5" cols="50"></textarea>
+                        </div>
+
+
+
+                        <label> Imagen de usuario:</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group alinear-centro" *ngIf="user.avatar && user.avatar != null">
+                                    <img src="{{ url +'user-image/'+ identity.avatar }}" class="profile-user-img img-responsive img-circle " alt="User Image"/>
+                                    <span (click)="changeAvatar()" class="badge bg-red pointer">Cambiar imagen</span>
+                                    <span (click)="deleteAvatar()" class="badge bg-yellow pointer">Quitar imagen</span>
+                                </div>
+                                <div *ngIf="user.avatar==null" class="callout callout-info col-md-10">
+                                    Sin imagen establecida.
+                                </div>
+
+                                <div class="form-group" *ngIf="changeImage==true||user.avatar==null">
+                                    <p>
+                                        <input type="file" placeholder="Subir imagen" (change)="fileChangeEvent($event)" />
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="submit" value="Guardar cambios" class="btn btn-block btn-primary" [disabled]="!editUserForm.form.valid " />
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-md-6">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Cambiar contraseña</h3>
+                </div>
+                <div class="box-body">
+                    <form #changePasswordForm="ngForm" (ngSubmit)="onSubmit('changePasswordForm')">
+                        <div class="form-group">
+                            <label>Contraseña actual:</label>
+                            <input type="password" name="passwordOld" #passwordOld="ngModel" [(ngModel)]="user.password" class="form-control " required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Nueva contraseña:</label>
+                            <input type="password" name="newPass" #newPass="ngModel" [(ngModel)]="newPassword" class="form-control " required />
+                        </div>
+                        <div [ngClass]="{'form-group': true, 'has-error': newPassword!=newPassword2 && newPass.touched && newPass2.touched }">
+                            <label>Repita nueva contraseña:</label>
+                            <input type="password" name="newPass2" #newPass2="ngModel" [(ngModel)]="newPassword2" class="form-control " required />
+                            <label *ngIf="newPassword!=newPassword2 && newPass.touched && newPass2.touched" class="control-label" for="inputError">
+                                    Las contraseñas no coinciden</label>
+                        </div>
+
+                        <input type="submit" value="Cambiar contraseña" class="btn btn-block btn-primary" [disabled]="!changePasswordForm.form.valid || newPassword!=newPassword2 "
+                        />
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.content -->

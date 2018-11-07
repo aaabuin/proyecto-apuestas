@@ -1,0 +1,158 @@
+<div class="content">
+
+    <div class="col-md-8 col-md-offset-2 ">
+        <div class="row">
+            <div class="col-md-12" name="details">
+
+
+
+                <div class="box-body">
+                    <form role="form" #searchForm="ngForm">
+                        <div class="row">
+                            <div class="form-group col-md-2">
+                                <label>Fecha inicial </label>
+                                <div class="input-group">
+                                    <select class="form-control" name="selectStartDate" #selectStartDate="ngModel" [(ngModel)]="startDate" (change)="loadDates()">
+                                        <option value="thismonth">Mes actual</option>
+                                        <option value="all">Todo</option>
+                                        <option *ngFor="let s of startPeriod" value='{{s.name}}'>{{s.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Fecha final </label>
+                                <div class="input-group">
+                                    <select class="form-control" name="selectEndDate" #selectEndDate="ngModel" [(ngModel)]="endDate" (change)="loadDates()"
+                                        [disabled]="!startDate||startDate=='thismonth'||startDate=='all'">
+                                        <option value="startdate">Mes seleccionado</option>
+                                        <option *ngFor="let e of endPeriod" value='{{e.name}}'>{{e.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row" *ngFor="let tipster of tipstersList|ordenarTipsters:order[0]:order[1]">
+
+            <div class="box">
+                <a [routerLink]="['/tipster/', tipster.user.id]">
+                    <div class="box-body letra_mediana pointer">
+                        <div class="col-xs-2 col-md-1 box-profile margin-top-5">
+                            <img *ngIf="tipster.user.avatar==null" src="{{ url +'user/user-image/default2.png' }}" class="profile-user-img img-responsive img-circle max_width_80"
+                                alt="User Image" />
+                            <img *ngIf="tipster.user.avatar!=null" src="{{ url +'user/user-image/'+ tipster.user.avatar }}" class="profile-user-img img-responsive img-circle max_width_80"
+                                alt="User Image" />
+
+                            <h4 class="text-center">{{tipster.user.username}}</h4>
+                            <div *ngIf="tipster&&tipster.subscription" class="padding_8 color_black">
+                                Siguiendo: {{tipster.subscription}}€/stake
+                            </div>
+                        </div>
+                        <div class="col-xs-10 col-md-4 alinear-centro borde_bajo_screen_xs borde_derecha">
+                            <div class="col_60 margin-top-5">
+                                <div class="selected negrita margin_bottom_5">
+                                    <div class="col_70 bg-blue padding_8">Numero de apuestas:</div>
+                                    <div class="col_30  padding_8 color_black">{{tipster.numPicks}}</div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="selected margin_bottom_5">
+                                    <div class="bg-light-blue col_70 padding_3"> Aciertos/fallos</div>
+                                    <div class="col_30  color_black padding_3"> {{tipster.numWins}} / {{tipster.numFails}}</div>
+                                    <!-- <div class="col_30 padding_3"> Fallos:</div> <div class="col_20 selected color_black padding_3 ">{{tipster.numFallos}}</div> -->
+
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="clear"></div>
+
+                                <div class="selected  ">
+                                    <div class="col_70 bg-blue padding_8"> CUOTA MEDIA:</div>
+                                    <div class="col_30 padding_8 color_black">{{tipster.oddAverage}}</div>
+
+                                    <div class="clear"></div>
+                                </div>
+                                
+
+
+                            </div>
+
+                            <div class="col_40 ">
+                                <div [chart]="winsChart[tipster.user.username]"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-xs-10 col-xs-offset-2 col-md-4 col-md-offset-0 alinear-centro borde_bajo_screen_xs borde_derecha">
+
+                            <div class="col_60 margin-top-5">
+                                <div class="selected negrita margin_bottom_5">
+                                    <div class="col_70 bg-blue padding_8">Cantidad apostada:</div>
+                                    <div class="col_30 color_black padding_8">{{tipster.stakedUnits}} €</div>
+                                    <div class="clear"></div>
+                                </div>
+
+                                <div class="selected margin_bottom_5">
+                                    <div class="col_70 bg-light-blue padding_3">Balance:</div>
+                                    <div class="col_30 color_black padding_3">{{tipster.profit}}</div>
+
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="negrita selected margin_bottom_5">
+                                    <div class="col_70 bg-blue  padding_8"> STAKE MEDIO</div>
+                                    <div class="col_30  padding_8 color_black">{{tipster.stakeAverage}} </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="selected negrita margin_bottom_5">
+                                    <div class="col_70 bg-blue padding_8">Descartadas:</div>
+                                    <div class="col_30  padding_8 color_black">{{tipster.numRejected}}/{{tipster.numPendings}}</div>
+                                    <div class="clear"></div>
+                                </div>
+
+                            </div>
+                            <div class="col_40">
+                                <div [chart]="yieldChart[tipster.user.username]"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-10 col-xs-offset-2 col-md-3 col-md-offset-0 alinear-centro borde_bajo_screen_xs borde_derecha">
+                            <div class="col_60">
+                                <div [chart]="originalYieldChart[tipster.user.username]"></div>
+                            </div>
+                            <div class="col_40  margin-top-5">
+                                <div class="selected margin_bottom_5">
+                                    <div class="col_70 bg-light-blue padding_3">Apuestas:</div>
+                                    <div class="col_30 color_black padding_3">
+                                        <span *ngIf="originalTipsterList[tipster.user.username]">{{originalTipsterList[tipster.user.username].numPicks}}</span></div>
+
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="selected margin_bottom_5">
+                                    <div class="col_70 bg-light-blue padding_3">Aciertos/fallos:</div>
+                                    <div class="col_30 color_black padding_3">
+                                        <span *ngIf="originalTipsterList[tipster.user.username]">{{originalTipsterList[tipster.user.username].numWins}}
+                                            / {{originalTipsterList[tipster.user.username].numFails}}</span></div>
+
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="selected margin_bottom_5">
+                                    <div class="col_70 bg-light-blue padding_3">Balance:</div>
+                                    <div class="col_30 color_black padding_3">
+                                        <span *ngIf="originalTipsterList[tipster.user.username]">{{originalTipsterList[tipster.user.username].profit}}</span></div>
+
+                                    <div class="clear"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </a>
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+
+
+</div>

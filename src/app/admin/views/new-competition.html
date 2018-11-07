@@ -1,0 +1,73 @@
+<div class="mensaje_fijo col-md-6">
+    <div class="alert alert-success alert-dimissible" *ngIf="success!=null">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        {{success}}
+    </div>
+    <div class="alert alert-danger alert-dimissible" *ngIf="error!=null">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        {{error}}
+    </div>
+</div>
+
+<div class="row">
+<div class="col-md-8 col-lg-6">
+
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title">Introducir nueva competición</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <form #competitionsAdminForm="ngForm" (ngSubmit)="onSubmit(competitionsAdminForm)">
+                    <div class="col-md-3">
+                        <label>Nombre</label>
+                        <input class="form-control" type="text" name="name" #name="ngModel" [(ngModel)]="competition.name" required />
+                    </div>
+
+
+                    <div class=" col-md-3 ">
+                        <label>Deporte</label>
+                        <select class="form-control" name="selectSport" #selectSport="ngModel" [(ngModel)]="competition.sport.id" required>
+                                                <option *ngFor="let sport of sportsList" [ngValue]='sport.id'>{{sport.name}}</option>
+                                            </select>
+
+                    </div>
+
+
+
+                    <div class="col-md-3">
+                        <label>País</label>
+                        <select class="form-control" name="selectCountry" #selectCountry="ngModel" [(ngModel)]="competition.country.id" required>
+                                                <option *ngFor="let country of countriesList" [ngValue]='country.id'>{{country.name}}</option>
+                                            </select>
+                    </div>
+
+                    <!--
+                                    <div class="col-md-3">
+                                        <label>Imagen:</label>
+                                        <div class="form-group " *ngIf="deporte.imagen == ''">
+            
+                                            <input type="file" class="fileinput" placeholder="Subir imagen" (change)="fileChangeEvent($event)" />
+                                        </div>
+                                        <div class="form-group image_size" *ngIf="deporte.imagen != ''">
+                                            <img src="{{ url_upload + 'upload-image/' + deporte.imagen }}" /><br />
+            
+                                            <span (click)="quitarImagen()" class="badge bg-danger pointer">Quitar imagen</span>
+            
+                                        </div>
+                                    </div>
+                                -->
+
+
+                    <div class="col-md-3 ">
+                        <input type="submit" value="Guardar" class="btn btn-primary margin-top-15 btn-sm" [disabled]="!competitionsAdminForm.form.valid "
+                        />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <!-- /.box-body -->
+    </div>
+</div>
+</div>

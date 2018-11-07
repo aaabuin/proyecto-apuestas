@@ -1,0 +1,93 @@
+<div class="row">
+
+
+    <div class="col-md-10 col-md-offset-1 ">
+        <div class="row">
+
+            <div class="box box-solid">
+
+                <div class="box-header">
+                    <form role="form" #searchTipsterForm="ngForm">
+                        <div class="row">
+                            <div class="form-group col-md-2">
+                                <label for="inputPick">Tipster</label>
+                                <input type="text" class="form-control" name="tipster" [(ngModel)]="tipsterName" placeholder="Tipster search..." (keyup)="emitFilter()">
+                            </div>
+                                
+                            <div class="form-group col-md-2">
+                                <label>Fecha inicial </label>
+                                <div class="input-group">
+                                    <select class="form-control" name="selectPeriod" #selectPeriod="ngModel" [(ngModel)]="period" (change)="emitFilter()">
+                                        <option *ngFor="let p of periodsList" value='{{p.value}}'>{{p.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Numero de apuestas: </label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="picksAmount" #picksAmount="ngModel" [(ngModel)]="numPicks" min=1 step=1 value=1
+                                        (blur)="emitFilter()">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Yield minimo</label>
+                                <div class="input-group">
+                                        <input type="number" class="form-control" name="minimunYield" #minimunYield="ngModel" [(ngModel)]="minYield" min=0 step=1 value=1
+                                        (blur)="emitFilter()">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                    <label>% acierto minimo</label>
+                                    <div class="input-group">
+                                            <input type="number" class="form-control" name="minimunSuccess" #minimunSuccess="ngModel" [(ngModel)]="winsAverage" min=0 max=100 step=1 value=1
+                                            (blur)="emitFilter()">
+                                    </div>
+                                </div>
+                            <div class="form-group col-md-2">
+                                <label>Ordenar por </label>
+                                <div class="input-group">
+                                    <select class="form-control" name="selectOrder" #selectOrder="ngModel" [(ngModel)]="order" (change)="emitFilter()">
+                                        <option *ngFor="let o of orderList" value='{{o.value}}'>{{o.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-2">
+                                <label>Deporte</label>
+                                <div class="input-group">
+                                    <select class="form-control" name="sportsSelect" #selectPeriod="ngModel" [(ngModel)]="sport" (change)="loadCompetitions()">
+                                        <option  value=''> </option>
+                                        <option *ngFor="let s of sportsList" value='{{s.id}}'>{{s.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Paises </label>
+                                <div class="input-group">
+                                    <select class="form-control" name="selectCountry" #selectCountry="ngModel" [(ngModel)]="country" (change)="loadCompetitions()">
+                                        <option  value=''> </option>
+                                        <option *ngFor="let c of countriesList" value='{{c.id}}'>{{c.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label>Competiciones </label>
+                                <div class="input-group">
+                                    <select class="form-control" name="selectCompetition" #selectCompetition="ngModel" [(ngModel)]="competition" (change)="loadCompetitions()">
+                                            <option  value=''> </option>
+                                            <option *ngFor="let c of competitionsList" value='{{c.id}}'>{{c.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

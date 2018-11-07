@@ -1,0 +1,244 @@
+<div class="content">
+
+    <div class="mensaje_fijo col-md-6">
+        <div class="alert alert-success alert-dimissible" *ngIf="success!=null">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> {{success}}
+        </div>
+        <div class="alert alert-danger alert-dimissible" *ngIf="error!=null">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> {{error}}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Publicar pronóstico</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+
+                    <div class="row">
+                        <!-- //////////SELECCIONAR EVENTO , PAIS, DEPORTE//////// -->
+                        <div class="col-md-12">
+                            <select-event (selectedEvent)="showData($event)"></select-event>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+
+
+        <div class="col-md-12" name="details">
+            <div class="box box-solid box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
+                        Detalles de la apuesta</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body ">
+                    <div class="table-responsive  col-md-12 ">
+
+
+                        <table class="table no-margin table-bordered">
+                            <thead class="bg-gray">
+                                <tr>
+                                    <th class="col-xs-3">Competición</th>
+                                    <th class="col-xs-3">Evento</th>
+                                    <th class="col-xs-4">Pronóstico</th>
+                                    <th class="col-xs-2">Cuota</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr *ngFor="let p of picks;index as i;">
+                                    <td colspan="2" *ngIf="!p.event">
+                                        <div class="alert alert-danger margin_bottom_0" (click)="scrollToAnchor('selectCompetition')">
+                                            <i class="icon fa fa-ban"></i>Debe seleccionar un evento!
+                                        </div>
+                                    </td>
+                                    <td *ngIf="p.event" class="image_size">
+
+
+
+                                        <div class="float-left">
+                                            <div>
+                                                {{p.event.competition.sport.name}}
+                                            </div>
+                                            <div>
+                                                {{p.event.competition.country.name}}
+                                            </div>
+                                        </div>
+
+                                        <div class="float-left" *ngIf="p.event.competition.sport.image!=''">
+
+
+                                            <img src="{{ url + 'sport/sport-image/' + p.event.competition.sport.image }}" />
+                                        </div>
+                                        <div class="float-left">
+                                            <img *ngIf="p.event.competition.country.image!=''" src="{{ url + 'country/country-image/' + p.event.competition.country.image }}"
+                                            />
+                                        </div>
+                                        <div>
+                                            <b>{{p.event.competition.name}}</b>
+                                        </div>
+
+
+                                    </td>
+                                    <td *ngIf="p.event">
+
+                                        <div>{{p.event.name}}</div>
+                                        <div>{{p.event.date}}</div>
+
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <input type="text" class="form-control" name="pick" #prediction="ngModel" [(ngModel)]="p.pick" placeholder="Escriba aquí...">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">@</span>
+                                            <input type="number" class="form-control" name="odd" #odd="ngModel" [(ngModel)]="p.odd" min=1 step=0.01 value=0.0 (keyup)="culcaulteOdd()"
+                                                (blur)="culcaulteOdd()">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="glyphicon glyphicon-remove pointer color_red" (click)="deletePick(i)"> </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+
+                                    </td>
+                                    <td colspan="1">
+                                        <button type="button" class="btn btn-block btn-info btn-sm" (click)="combinePick()" [disabled]="!checkPicks()">Combinar pronóstico</button>
+                                    </td>
+                                    <td colspan="1">
+                                        <label *ngIf="picks.length>1">Cuota final: {{oddCombi}}</label>
+
+                                    </td>
+                                    <td></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        <hr>
+                    </div>
+
+
+
+
+                    <div class="col-md-6">
+
+                        <div class="form-group ">
+                            <label>Stake</label>
+                            <input type="number" name="stake" #odd="ngModel" [(ngModel)]="bet.stake" class="form-control" min=0.25 max=10 step=0.25
+                                required>
+                        </div>
+
+
+                        <div>
+                            <div class="box box-default box-solid">
+                                <div class="box-header with-border" data-toggle="collapse" data-target="#widget-bookie">
+                                    <h3 class="box-title">Selecciona casa de apuestas</h3>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool"><span class="glyphicon glyphicon-chevron-down"></span>
+                                        </button>
+                                    </div>
+                                    <!-- /.box-tools -->
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="collapse" id="widget-bookie">
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <div class="input-group input-group-sm">
+                                                    <input type="text" class="form-control" placeholder="Buscar bookie" name="bookieFilter" [(ngModel)]="bookieFilter" (keyup)="filterBookies()"
+                                                        (blur)="filterBookies()">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-danger btn-flat" (click)="cleanBookiesFilter()">Borrar</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="bookiesList.length==0">
+                                            <h5>No se encontraron casas de apuestas...</h5>
+                                        </div>
+
+                                        <div *ngIf="bookiesList.length>0">
+
+                                            <ul class="pagination inline">
+                                                <li *ngFor="let bookie of bookiesList| paginate: { itemsPerPage: itemsBookie, currentPage: 1 }" class="col_20_resp">
+                                                    <a (click)="assignBookie(bookie.id)" [ngClass]="{'altura_fija_2 ancho_fijo padding_10 image_size_big':true,'selected': bet.bookie && bookie.id==bet.bookie.id }">
+                                                                <img *ngIf="bookie.image!=''" src="{{ url + 'bookie/bookie-image/' + bookie.image }}" />
+                                                            <div>{{bookie.name}}</div></a>
+                                                </li>
+                                            </ul>
+
+
+                                        </div>
+
+                                    </div>
+                                    <!-- /.box-body -->
+
+                                    <div class="box-footer text-center">
+
+
+                                        <div class="col-sm-4 ">
+                                            <a href="javascript:void(0)" (click)="showMoreBookies()" class="uppercase">Mostrar más casas de apuestas.</a>
+                                        </div>
+                                        <div class="col-sm-8 bg-gray padding_10 ">
+                                            <div data-toggle="collapse" data-target="#widget-newBookie" class="text-left"> Si no encuentra una bookie, creela aqui:</div>
+                                            <div class=" collapse" id="widget-newBookie">
+                                                <div class="input-group input-group-md">
+                                                    <input type="text" class="form-control" placeholder="Escriba aqui..." [(ngModel)]="bookie.name" (keyup)="filterBookies()"
+                                                        (blur)="filterBookies()">
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-primary btn-flat" (click)="saveBookie()">Añadir</button>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div>
+                        <div class="form-group col-md-6">
+                            <label>Argumento:</label>
+                            <textarea name="argument" #arg="ngModel" [(ngModel)]="bet.argument" class="form-control" rows="8" placeholder="El argumento es opcional..."></textarea>
+                        </div>
+
+                    </div>
+
+                    <button type="button" class="btn btn-block btn-success btn-lg" (click)="publicBet()" [disabled]="!checkPicks() || !bet.bookie || !bet.bookie.id">Publicar apuesta</button>
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col (left) -->
+
+    </div>
+
+
+</div>

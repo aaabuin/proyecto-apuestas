@@ -1,0 +1,135 @@
+<new-sport></new-sport>
+
+
+<div class="mensaje_fijo col-md-6">
+    <div class="alert alert-success alert-dimissible" *ngIf="success!=null">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        {{success}}
+    </div>
+    <div class="alert alert-danger alert-dimissible" *ngIf="error!=null">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        {{error}}
+    </div>
+</div>
+
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <small class="form-text text-muted">*Pulsar sobre el nombre para editar</small>
+            <table id="example1" class="table table-bordered table-hover dataTable centrado" role="grid">
+                <thead>
+                    <tr role="row" class="bg-gray ">
+
+                        <th rowspan="1" colspan="1" class="col-md-2">Nombre deporte
+                            <div class="flota-derecha">
+                                <i class="fa fa-arrow-circle-up pointer " (click)="sortSport('name','asc')"></i>
+                                <i class="fa fa-arrow-circle-down pointer " (click)="sortSport('name','desc')"></i>
+                            </div>
+
+                        </th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Imagen</th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Estado
+                            <div class="flota-derecha">
+                                <i class="fa fa-arrow-circle-up pointer " (click)="sortSport('status','asc')"></i>
+                                <i class="fa fa-arrow-circle-down pointer " (click)="sortSport('status','desc')"></i>
+                            </div>
+
+                        </th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Usuario
+                            <div class="flota-derecha">
+                                <i class="fa fa-arrow-circle-up pointer " (click)="sortSport('status','asc')"></i>
+                                <i class="fa fa-arrow-circle-down pointer " (click)="sortSport('status','desc')"></i>
+                            </div>
+
+                        </th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Fecha creación
+                            <div class="flota-derecha">
+                                <i class="fa fa-arrow-circle-up pointer " (click)="sortSport('status','asc')"></i>
+                                <i class="fa fa-arrow-circle-down pointer " (click)="sortSport('status','desc')"></i>
+                            </div>
+
+                        </th>
+                        <th rowspan="1" colspan="1" class="col-md-2">Acciones</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr role="row" *ngFor="let sp of sportsList">
+
+                        <th class="">
+                            <i *ngIf="modifiedSport!=null && modifiedSport==sp.id" class="fa fa-fw fa-check-circle bg-gris float-left"></i>
+                            <div contenteditable="true" id="sportEditable{{sp.id}}" (keydown)="disableEnter(sp.id)" (blur)="changeName(sp.id)">{{sp.name}}</div>
+                        </th>
+                        <td class="">
+
+                            <div class="image_size" *ngIf="sp.image != ''">
+                                <img src="{{ url + 'sport-image/' + sp.image }}" />
+                                <span (click)="deleteSportImage(sp.id)" class="badge bg-orange pointer">Quitar imagen</span>
+                            </div>
+
+                            <div *ngIf="sp.image == ''"><input type="file" class="fileinput" placeholder="Subir imagen" (change)="fileChangeEvent($event,sp.id)"
+                                /></div>
+
+
+
+
+                        </td>
+                        <td class="">
+                            <span *ngIf="sp.status==1">Activado</span>
+                            <span *ngIf="sp.status==0">Desactivado</span>
+                            <span *ngIf="sp.status==2">Pendiente de validación</span>
+                        </td>
+                        <td class="">
+                            <span *ngIf="sp.userId">{{sp.userId}}</span>
+                            <span *ngIf="sp.userId==0">Admin</span>
+                            
+                        </td>
+                        <td class="">
+                            <span *ngIf="sp.createdAt">{{sp.createdAt|date:'dd-MM-yyyy H:mm'}}</span>
+                            
+                        </td>
+
+                        <td>
+                            <span *ngIf="sp.status!=1" class="badge badge-pill bg-green pointer" (click)="activateSport(sp.id)">Activar</span>
+                            <span *ngIf="sp.status!=0" class="badge badge-pill pointer" (click)="disableSport(sp.id)">Desactivar</span>
+
+                            <a href="#deleteSport{{sp.id}}Modal" data-toggle="modal"> 
+                                            <span class="badge badge-pill bg-red pointer" >Eliminar</span>
+                                    </a>
+
+                            <div class="modal fade" id="deleteSport{{sp.id}}Modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-center">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span></button>
+
+                                            <h4 class="modal-title"> Confirmación de seguridad. </h4>
+
+                                        </div>
+
+
+                                        <div class="modal-body">
+                                            Va a borrar el deporte <b>{{sp.name}}</b>. ¿Deseas continuar?
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" id="modalButtonClose" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteSport(sp.id)">Borrar</button>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </td>
+
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
