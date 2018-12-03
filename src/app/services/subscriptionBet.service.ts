@@ -150,13 +150,13 @@ export class SubscriptionBetService {
                 }
                 ))
             }
-            ).then(z => {
-                //guardamos  la apuesta completa con la bookie en su sitio final
-                return Promise.all(bettingList.map(bt => {
-                    bt.bet = z.find(o => o.id === bt.bet);
-                    return bt;
-                }));
-            });
+        ).then(z => {
+            //guardamos  la apuesta completa con la bookie en su sitio final
+            return Promise.all(bettingList.map(bt => {
+                bt.bet = z.find(o => o.id === bt.bet);
+                return bt;
+            }));
+        });
 
     }
 
